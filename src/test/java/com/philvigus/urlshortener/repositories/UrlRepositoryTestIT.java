@@ -54,6 +54,6 @@ class UrlRepositoryTestIT {
     Optional<Url> savedUrl = urlRepository.findByShortUrl(SHORT_URL);
 
     assertTrue(savedUrl.isPresent());
-    assertEquals(SHORT_URL, savedUrl.get().getFullUrl());
+    assertEquals(SHORT_URL, savedUrl.get().getShortUrl());
   }
 }
