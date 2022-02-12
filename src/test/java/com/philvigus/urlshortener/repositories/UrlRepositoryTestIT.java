@@ -17,7 +17,7 @@ class UrlRepositoryTestIT {
   @Autowired UrlRepository urlRepository;
 
   @Test
-  public void Save() {
+  public void save() {
     Url url = new Url();
 
     urlRepository.save(url);
@@ -27,5 +27,18 @@ class UrlRepositoryTestIT {
     assertNotNull(url.getId());
     assertTrue(savedUrl.isPresent());
     assertEquals(url, savedUrl.get());
+  }
+
+  @Test
+  public void findByFullUrl() {
+    final String FULL_URL = "www.test.com";
+    Url url = new Url();
+    url.setFullUrl(FULL_URL);
+    urlRepository.save(url);
+
+    Optional<Url> savedUrl = urlRepository.findByFullUrl(FULL_URL);
+
+    assertTrue(savedUrl.isPresent());
+    assertEquals(FULL_URL, savedUrl.get().getFullUrl());
   }
 }
