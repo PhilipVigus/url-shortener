@@ -30,4 +30,16 @@ class UrlServiceImplTest {
 
     verify(urlRepository, times(1)).save(url);
   }
+
+  @Test
+  public void findByFullUrl() {
+    final String FULL_URL = "www.test.com";
+
+    Url url = new Url();
+    urlRepository.save(url);
+
+    urlRepository.findByFullUrl(FULL_URL);
+
+    verify(urlRepository, times(1)).findByFullUrl(FULL_URL);
+  }
 }
