@@ -32,6 +32,7 @@ class UrlRepositoryTestIT {
   @Test
   public void findByFullUrl() {
     final String FULL_URL = "www.test.com";
+
     Url url = new Url();
     url.setFullUrl(FULL_URL);
     urlRepository.save(url);
@@ -40,5 +41,19 @@ class UrlRepositoryTestIT {
 
     assertTrue(savedUrl.isPresent());
     assertEquals(FULL_URL, savedUrl.get().getFullUrl());
+  }
+
+  @Test
+  public void findByShortUrl() {
+    final String SHORT_URL = "abc";
+
+    Url url = new Url();
+    url.setShortUrl(SHORT_URL);
+    urlRepository.save(url);
+
+    Optional<Url> savedUrl = urlRepository.findByShortUrl(SHORT_URL);
+
+    assertTrue(savedUrl.isPresent());
+    assertEquals(SHORT_URL, savedUrl.get().getFullUrl());
   }
 }
