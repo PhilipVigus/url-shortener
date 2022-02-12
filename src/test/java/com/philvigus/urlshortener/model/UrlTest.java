@@ -15,28 +15,28 @@ class UrlTest {
 
   @Test
   public void setId() {
-    Long id = 1L;
+    Long ID = 1L;
 
-    url.setId(id);
+    url.setId(ID);
 
-    assertEquals(id, url.getId());
+    assertEquals(ID, url.getId());
   }
 
   @Test
   public void setFullUrl() {
-    String fullUrl = "www.test.com";
+    final String FULL_URL = "www.test.com";
 
-    url.setFullUrl(fullUrl);
+    url.setFullUrl(FULL_URL);
 
-    assertEquals(fullUrl, url.getFullUrl());
+    assertEquals(FULL_URL, url.getFullUrl());
   }
 
   @Test
   public void setShortUrl() {
-    String shortUrl = "abcde";
+    final String SHORT_URL = "abcde";
 
-    url.setShortUrl(shortUrl);
+    url.setShortUrl(SHORT_URL);
 
-    assertEquals(shortUrl, url.getShortUrl());
+    assertEquals(SHORT_URL, url.getShortUrl());
   }
 }
