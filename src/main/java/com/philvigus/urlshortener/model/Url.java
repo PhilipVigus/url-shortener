@@ -6,4 +6,5 @@ import lombok.Data;
 public class Url {
   private Long id;
   private String fullUrl;
+  private String shortUrl;
 }

@@ -30,4 +30,13 @@ class UrlTest {
 
     assertEquals(fullUrl, url.getFullUrl());
   }
+
+  @Test
+  public void setShortUrl() {
+    String shortUrl = "abcde";
+
+    url.setShortUrl(shortUrl);
+
+    assertEquals(shortUrl, url.getShortUrl());
+  }
 }
