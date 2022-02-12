@@ -14,6 +14,15 @@ class UrlTest {
   }
 
   @Test
+  public void setId() {
+    Long id = 1L;
+
+    url.setId(id);
+
+    assertEquals(id, url.getId());
+  }
+
+  @Test
   public void setFullUrl() {
     String fullUrl = "www.test.com";
 
