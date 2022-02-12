@@ -26,7 +26,7 @@ class UrlServiceImplTest {
   public void saveUrl() {
     Url url = new Url();
 
-    Url savedUrl = urlRepository.save(url);
+    urlRepository.save(url);
 
     verify(urlRepository, times(1)).save(url);
   }
