@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @DataJpaTest
-class UrlRepositoryTest {
+class UrlRepositoryTestIT {
   @Autowired UrlRepository urlRepository;
 
   @Test
