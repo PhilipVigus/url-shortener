@@ -35,11 +35,17 @@ class UrlServiceImplTest {
   public void findByFullUrl() {
     final String FULL_URL = "www.test.com";
 
-    Url url = new Url();
-    urlRepository.save(url);
-
     urlRepository.findByFullUrl(FULL_URL);
 
     verify(urlRepository, times(1)).findByFullUrl(FULL_URL);
+  }
+
+  @Test
+  public void findByShortUrl() {
+    final String SHORT_URL = "short";
+
+    urlRepository.findByFullUrl(SHORT_URL);
+
+    verify(urlRepository, times(1)).findByFullUrl(SHORT_URL);
   }
 }
