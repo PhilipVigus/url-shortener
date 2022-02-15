@@ -43,7 +43,7 @@ class UrlRedirectControllerTest {
     Url url = new Url();
     url.setShortUrl("short");
 
-    when(urlService.findByFullUrl("short")).thenReturn(Optional.of(url));
+    when(urlService.findByShortUrl("short")).thenReturn(Optional.of(url));
 
     mockMvc.perform(get("/short")).andExpect(status().is3xxRedirection());
   }

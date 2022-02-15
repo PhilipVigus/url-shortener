@@ -21,7 +21,7 @@ public class UrlRedirectController {
 
   @GetMapping("{shortUrl}")
   public ResponseEntity<Void> redirect(@PathVariable String shortUrl) {
-    Optional<Url> url = urlService.findByFullUrl(shortUrl);
+    Optional<Url> url = urlService.findByShortUrl(shortUrl);
 
     if (!url.isPresent()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
