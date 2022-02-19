@@ -12,11 +12,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-class UserRepositoryTest {
+class UserRepositoryTestIT {
   @Autowired UserRepository userRepository;
 
   @Test
