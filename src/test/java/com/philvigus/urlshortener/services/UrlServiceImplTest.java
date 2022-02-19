@@ -11,7 +11,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class UrlServiceImplTest {
-  public UrlServiceImpl urlService;
+  private UrlServiceImpl urlService;
 
   @Mock UrlRepository urlRepository;
 
@@ -23,10 +23,10 @@ class UrlServiceImplTest {
   }
 
   @Test
-  public void saveUrl() {
+  public void save() {
     Url url = new Url();
 
-    urlRepository.save(url);
+    urlService.save(url);
 
     verify(urlRepository, times(1)).save(url);
   }
@@ -35,7 +35,7 @@ class UrlServiceImplTest {
   public void findByFullUrl() {
     final String FULL_URL = "www.test.com";
 
-    urlRepository.findByFullUrl(FULL_URL);
+    urlService.findByFullUrl(FULL_URL);
 
     verify(urlRepository, times(1)).findByFullUrl(FULL_URL);
   }
@@ -44,7 +44,7 @@ class UrlServiceImplTest {
   public void findByShortUrl() {
     final String SHORT_URL = "short";
 
-    urlRepository.findByFullUrl(SHORT_URL);
+    urlService.findByFullUrl(SHORT_URL);
 
     verify(urlRepository, times(1)).findByFullUrl(SHORT_URL);
   }
