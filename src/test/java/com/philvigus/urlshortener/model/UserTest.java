@@ -39,20 +39,4 @@ class UserTest {
 
     assertEquals(PASSWORD, user.getPassword());
   }
-
-  @Test
-  void setRole() {
-    final String ROLE = "role";
-
-    user.setRole(ROLE);
-
-    assertEquals(ROLE, user.getRole());
-  }
-
-  @Test
-  void setEnabled() {
-    user.setEnabled(true);
-
-    assertTrue(user.isEnabled());
-  }
 }
