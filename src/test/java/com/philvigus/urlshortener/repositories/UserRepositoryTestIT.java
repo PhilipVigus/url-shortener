@@ -21,9 +21,11 @@ class UserRepositoryTestIT {
   @Test
   void getUserByUsername() {
     final String USERNAME = "username";
+    final String PASSWORD = "password";
 
     User user = new User();
     user.setUsername(USERNAME);
+    user.setPassword(PASSWORD);
 
     userRepository.save(user);
 
