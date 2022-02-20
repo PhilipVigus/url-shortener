@@ -6,5 +6,12 @@
 </head>
 <body>
 Login
+<form name="f" th:action="@{/login}" method="post">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username"/>
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password"/>
+    <button type="submit">Log in</button>
+</form>
 </body>
 </html>
