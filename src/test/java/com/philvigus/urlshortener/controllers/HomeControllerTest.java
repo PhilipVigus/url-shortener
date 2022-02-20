@@ -17,7 +17,7 @@ class HomeControllerTest {
   }
 
   @Test
-  void show() throws Exception {
+  void view() throws Exception {
     MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
     mockMvc.perform(get("/")).andExpect(status().isOk());
