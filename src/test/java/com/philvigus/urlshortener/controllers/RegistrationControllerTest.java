@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -27,13 +26,12 @@ class RegistrationControllerTest {
   RegistrationController controller;
 
   @Mock UserService userService;
-  @Mock BCryptPasswordEncoder passwordEncoder;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
 
-    controller = new RegistrationController(userService, passwordEncoder);
+    controller = new RegistrationController(userService);
   }
 
   @Test
@@ -47,7 +45,6 @@ class RegistrationControllerTest {
   void create() throws Exception {
     final String USERNAME = "username";
     final String UNENCODED_PASSWORD = "unencoded password";
-    final String ENCODED_PASSWORD = "encoded password";
 
     MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 
@@ -55,7 +52,6 @@ class RegistrationControllerTest {
 
     ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
-    when(passwordEncoder.encode(UNENCODED_PASSWORD)).thenReturn(ENCODED_PASSWORD);
     when(userService.save(any(User.class))).thenReturn(user);
 
     mockMvc
@@ -67,12 +63,10 @@ class RegistrationControllerTest {
         .andExpect(status().is3xxRedirection())
         .andExpect(MockMvcResultMatchers.view().name("redirect:login"));
 
-    verify(passwordEncoder, times(1)).encode(UNENCODED_PASSWORD);
     verify(userService, times(1)).save(captor.capture());
 
     User userToSave = captor.getValue();
 
     assertEquals(USERNAME, userToSave.getUsername());
-    assertEquals(ENCODED_PASSWORD, userToSave.getPassword());
   }
 }
