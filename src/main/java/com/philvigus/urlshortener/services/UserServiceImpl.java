@@ -4,8 +4,6 @@ import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class UserServiceImpl implements UserService {
   private final UserRepository repository;
@@ -20,7 +18,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<User> getUserByUsername(String username) {
-    return repository.getUserByUsername(username);
+  public User findByUsername(String username) {
+    return repository.findByUsername(username);
   }
 }

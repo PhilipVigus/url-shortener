@@ -8,9 +8,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
@@ -19,7 +18,7 @@ class UserRepositoryTestIT {
   @Autowired UserRepository userRepository;
 
   @Test
-  void getUserByUsername() {
+  void findByUsername() {
     final String USERNAME = "username";
     final String PASSWORD = "password";
 
@@ -29,10 +28,8 @@ class UserRepositoryTestIT {
 
     userRepository.save(user);
 
-    List<User> users = userRepository.getUserByUsername(USERNAME);
-    User savedUser = users.get(0);
+    User savedUser = userRepository.findByUsername(USERNAME);
 
-    assertEquals(1, users.size());
     assertNotNull(savedUser.getId());
     assertEquals(USERNAME, savedUser.getUsername());
   }

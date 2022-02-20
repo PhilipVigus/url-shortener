@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -32,11 +31,11 @@ class UserServiceImplTest {
   }
 
   @Test
-  void getUserByUsername() {
+  void findByUsername() {
     final String USERNAME = "username";
 
-    userService.getUserByUsername(USERNAME);
+    userService.findByUsername(USERNAME);
 
-    verify(userRepository, times(1)).getUserByUsername(USERNAME);
+    verify(userRepository, times(1)).findByUsername(USERNAME);
   }
 }
