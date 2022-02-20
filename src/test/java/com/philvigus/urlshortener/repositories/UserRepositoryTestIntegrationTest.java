@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-class UserRepositoryTestIT {
+class UserRepositoryTestIntegrationTest {
   @Autowired UserRepository userRepository;
 
   @Test
