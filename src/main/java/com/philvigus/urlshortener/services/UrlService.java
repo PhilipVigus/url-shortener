@@ -5,7 +5,7 @@ import com.philvigus.urlshortener.model.Url;
 import java.util.Optional;
 
 public interface UrlService {
-  Url saveUrl(Url url);
+  Url save(Url url);
 
   Optional<Url> findByFullUrl(String fullUrl);
 

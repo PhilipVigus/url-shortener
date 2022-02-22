@@ -15,7 +15,7 @@ class UrlTest {
 
   @Test
   public void setId() {
-    Long ID = 1L;
+    final Long ID = 1L;
 
     url.setId(ID);
 
