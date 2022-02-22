@@ -1,7 +1,9 @@
 package com.philvigus.urlshortener.controllers;
 
+import com.philvigus.urlshortener.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -11,9 +13,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class HomeControllerTest {
   HomeController controller;
 
+  @Mock UserService userService;
+
   @BeforeEach
   void setUp() {
-    controller = new HomeController();
+    controller = new HomeController(userService);
   }
 
   @Test
