@@ -2,7 +2,6 @@ package com.philvigus.urlshortener.controllers;
 
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.repositories.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,15 +27,17 @@ public class LoginControllerIntegrationTest {
 
   @Autowired private UserRepository userRepository;
 
-  private MockMvc mvc;
+  @Test
+  public void anUnregisteredUserCannotLogin() throws Exception {
+    MockMvc mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
-  @BeforeEach
-  void setUp() {
-    mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+    mvc.perform(formLogin("/login").user("test").password("password"))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(unauthenticated());
   }
 
   @Test
-  public void aRegisteredUserCanLogin() throws Exception {
+  public void anAuthedUserCanLogInAndOut() throws Exception {
     final String USERNAME = "username";
     final String PASSWORD = "password";
 
@@ -48,16 +49,16 @@ public class LoginControllerIntegrationTest {
 
     userRepository.save(user);
 
+    MockMvc mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+
     mvc.perform(formLogin("/login").user(USERNAME).password(PASSWORD))
         .andExpect(status().is3xxRedirection())
         .andExpect(authenticated());
     ;
-  }
 
-  @Test
-  public void anUnregisteredUserCannotLogin() throws Exception {
-    mvc.perform(formLogin("/login").user("test").password("password"))
+    mvc.perform(formLogin("/logout"))
         .andExpect(status().is3xxRedirection())
         .andExpect(unauthenticated());
+    ;
   }
 }
