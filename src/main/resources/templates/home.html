@@ -26,12 +26,17 @@
         </div>
         <div class="col-sm-12 col-lg-4">
             <div class="d-flex h-100 justify-content-center align-items-center flex-column">
-                <a class="btn btn-lg btn-primary w-75 w-md-50" href="login">Sign in</a>
-                <a class="btn btn-lg btn-outline-primary w-75 w-md-50 mt-4" href="register">Sign up</a>
+                <button type="button" class="btn btn-lg btn-primary w-75 w-md-50" data-bs-toggle="modal"
+                        data-bs-target="#signInModal">Sign in
+                </button>
+                <button type="button" class="btn btn-lg btn-outline-primary w-75 w-md-50 mt-4" data-bs-toggle="modal"
+                        data-bs-target="#signUpModal">Sign up
+                </button>
             </div>
         </div>
     </div>
-</div>
 
+    <div th:replace="fragments/signInModal"></div>
+    <div th:replace="fragments/signUpModal"></div>
 </body>
 </html>
