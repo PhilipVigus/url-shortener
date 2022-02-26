@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,15 +28,9 @@ public class HomeControllerIntegrationTest {
     mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
-  @WithMockUser()
   @Test
-  public void anAuthedUserCanAccessTheHomepage() throws Exception {
+  public void youCanAccessTheHomepage() throws Exception {
     mvc.perform(get("/")).andExpect(status().isOk());
-  }
-
-  @Test
-  public void anGuestUserCannotAccessTheHomepage() throws Exception {
-    mvc.perform(get("/")).andExpect(status().is3xxRedirection());
     ;
   }
 }

@@ -1,0 +1,4 @@
+DELETE
+FROM Url;
+DELETE
+FROM User;

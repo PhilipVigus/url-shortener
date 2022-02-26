@@ -1,11 +1,16 @@
 package com.philvigus.urlshortener.model;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
+@Table(name = "user")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +21,7 @@ public class User {
 
   @Column(nullable = false, length = 64)
   private String password;
+
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  private Set<Url> urls = new HashSet<>();
 }
