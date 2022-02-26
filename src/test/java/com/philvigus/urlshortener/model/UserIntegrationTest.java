@@ -22,7 +22,8 @@ class UserIntegrationTest {
   @Autowired UrlService urlService;
 
   @Test
-  @Sql("classpath:createUser.sql")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   void getUrls() {
     User user = userService.findByUsername("phil");
 

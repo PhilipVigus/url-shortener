@@ -22,6 +22,6 @@ public class User {
   @Column(nullable = false, length = 64)
   private String password;
 
-  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   private Set<Url> urls = new HashSet<>();
 }

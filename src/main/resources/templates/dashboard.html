@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+<h1>Dashboard</h1>
+<div th:text="'Welcome ' + ${#authentication.name} + '!'"></div>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Logout"/>
+</form>
+<div th:if="${#lists.isEmpty(urls)}">
+    Sorry - no urls to see here!
+</div>
+<div th:if="${not #lists.isEmpty(urls)}">
+    All the urls!
+    <ul th:each="url : ${urls}">
+        <li th:text="${url.getShortUrl()} + ' - ' + ${url.getFullUrl()}"></li>
+    </ul>
+</div>
+</body>
+</html>
