@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.authorizeRequests()
-        .antMatchers("/")
+        .antMatchers("/dashboard")
         .authenticated()
         .anyRequest()
         .permitAll()
@@ -53,7 +53,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .formLogin()
         .loginPage("/login")
         .usernameParameter("username")
-        .defaultSuccessUrl("/")
+        .defaultSuccessUrl("/dashboard")
         .permitAll()
         .and()
         .logout()
