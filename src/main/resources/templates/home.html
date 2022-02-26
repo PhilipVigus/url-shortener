@@ -3,10 +3,33 @@
 <head th:replace="fragments/head :: head(title='URL Shortner')">
 </head>
 <body>
-<h1>Url Shortener</h1>
-<h3><a th:href="@{/register}">Register</a></h3>
-<form th:action="@{/login}" method="post">
-    <input type="submit" value="Login"/>
-</form>
+<!--<h1>Url Shortener</h1>-->
+<!--<h3><a th:href="@{/register}">Register</a></h3>-->
+<!--<form th:action="@{/login}" method="post">-->
+<!--    <input type="submit" value="Login"/>-->
+<!--</form>-->
+<div class="d-md-flex h-md-100 align-items-center">
+
+    <!-- First Half -->
+    <div class="col-md-9 p-0 bg-dark h-md-100">
+        <div class="text-white d-md-flex align-items-center h-100 p-5 justify-content-center">
+            <div class="logoarea pt-5 pb-5 text-left">
+                <h1>Welcome to Wibbly</h1>
+                <p>A simple URL shortener written in Java</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Second Half -->
+    <div class="col-md-3 p-0 bg-white h-md-100">
+        <div class="d-md-flex align-items-center h-md-100 justify-content-center">
+            <div class="w-100 p-5">
+                <a class="btn btn-lg btn-primary btn-block d-block" href="login">Sign in</a>
+                <a class="btn btn-lg btn-outline-primary btn-block d-block mt-4" href="register">Sign up</a>
+            </div>
+        </div>
+    </div>
+
+</div>
 </body>
 </html>
