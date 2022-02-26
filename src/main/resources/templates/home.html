@@ -8,28 +8,30 @@
 <!--<form th:action="@{/login}" method="post">-->
 <!--    <input type="submit" value="Login"/>-->
 <!--</form>-->
-<div class="d-md-flex h-md-100 align-items-center">
+<!--<div class="container-fluid h-100 bg-black">-->
+<!--    <div class="h-100 flex-grow-1">-->
 
-    <!-- First Half -->
-    <div class="col-md-9 p-0 bg-dark h-md-100">
-        <div class="text-white d-md-flex align-items-center h-100 p-5 justify-content-center">
-            <div class="logoarea pt-5 pb-5 text-left">
+<!--    </div>-->
+
+<!--    <div class="h-100 flex-grow-1">-->
+<!--    </div>-->
+<!--</div>-->
+<div class="container-fluid vh-100">
+    <div class="row h-100 justify-content-center">
+        <div class="col-sm-12 col-lg-8 bg-dark text-white">
+            <div class="d-flex h-100 justify-content-center align-items-center flex-column">
                 <h1>Welcome to Wibbly</h1>
                 <p>A simple URL shortener written in Java</p>
             </div>
         </div>
-    </div>
-
-    <!-- Second Half -->
-    <div class="col-md-3 p-0 bg-white h-md-100">
-        <div class="d-md-flex align-items-center h-md-100 justify-content-center">
-            <div class="w-100 p-5">
-                <a class="btn btn-lg btn-primary btn-block d-block" href="login">Sign in</a>
-                <a class="btn btn-lg btn-outline-primary btn-block d-block mt-4" href="register">Sign up</a>
+        <div class="col-sm-12 col-lg-4">
+            <div class="d-flex h-100 justify-content-center align-items-center flex-column">
+                <a class="btn btn-lg btn-primary w-75 w-md-50" href="login">Sign in</a>
+                <a class="btn btn-lg btn-outline-primary w-75 w-md-50 mt-4" href="register">Sign up</a>
             </div>
         </div>
     </div>
-
 </div>
+
 </body>
 </html>
