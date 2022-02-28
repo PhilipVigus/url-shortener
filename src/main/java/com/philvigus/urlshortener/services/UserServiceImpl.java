@@ -2,12 +2,14 @@ package com.philvigus.urlshortener.services;
 
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
   private final UserRepository repository;
 
+  @Autowired
   public UserServiceImpl(UserRepository repository) {
     this.repository = repository;
   }

@@ -3,6 +3,7 @@ package com.philvigus.urlshortener.controllers;
 import com.philvigus.urlshortener.model.Url;
 import com.philvigus.urlshortener.repositories.UrlRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@Disabled
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles("test")
 @SpringBootTest
