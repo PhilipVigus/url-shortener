@@ -44,7 +44,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
-    http.authorizeRequests()
+    http.csrf()
+        .disable()
+        .authorizeRequests()
         .antMatchers("/dashboard")
         .authenticated()
         .anyRequest()
@@ -52,6 +54,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .and()
         .formLogin()
         .loginPage("/login")
+        .failureUrl("/login?error=true")
         .usernameParameter("username")
         .defaultSuccessUrl("/dashboard")
         .permitAll()

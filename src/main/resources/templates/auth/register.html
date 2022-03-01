@@ -12,7 +12,8 @@
             <form name="f" th:action="@{/register}" method="post" th:object="${user}">
                 <div class="form-group d-flex justify-content-between">
                     <label for="username">Username</label>
-                    <input class="ms-2 flex-grow-1" type="text" id="username" name="username" placeholder="Username"
+                    <input class="ms-2 flex-grow-1" type="text" id="username" name="username"
+                           placeholder="Username"
                            th:field="*{username}"
                            required/>
                 </div>

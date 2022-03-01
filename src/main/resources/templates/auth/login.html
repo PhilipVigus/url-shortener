@@ -4,7 +4,7 @@
 </head>
 <body>
 <div class="bg-dark vh-100 d-flex justify-content-center align-items-center">
-    <div class="bg-white d-inline-block w-auto rounded p-3">
+    <div class="container-sm bg-white d-inline-block rounded p-3 col-sm-auto">
         <div class="border-bottom">
             <h1 class="fs-2 fw-bold">Sign in</h1>
         </div>
@@ -12,12 +12,22 @@
             <form name="f" th:action="@{/login}" method="post">
                 <div class="form-group d-flex justify-content-between">
                     <label for="username">Username</label>
-                    <input class="ms-2" type="text" id="username" name="username" placeholder="Username"/>
+                    <input class="ms-2 flex-grow-1" type="text" id="username" name="username"
+                           placeholder="Username"
+                           required/>
                 </div>
+
+                <p class="small text-danger text-break mt-2" th:if="${param.error}">
+                    Username or password not recognised
+                </p>
+
                 <div class="form-group d-flex justify-content-between mt-2">
                     <label for="password">Password</label>
-                    <input class="ms-2" type="password" id="password" name="password" placeholder="Password"/>
+                    <input class="ms-2" type="password" id="password" name="password"
+                           placeholder="Password"
+                           required/>
                 </div>
+                
                 <div class="d-flex justify-content-end border-top pt-3 mt-3">
                     <a class="btn btn-secondary me-3" href="/">Cancel</a>
                     <button class="btn btn-primary" type="submit">Sign up</button>
