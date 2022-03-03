@@ -15,3 +15,7 @@
 .text-cyan {
     color: #35bdff;
 }
+
+body {
+    padding-top: 5rem;
+}
