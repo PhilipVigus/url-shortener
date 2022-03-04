@@ -2,61 +2,72 @@ package com.philvigus.urlshortener.controllers;
 
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.services.UserService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(MockitoExtension.class)
+@ExtendWith(SpringExtension.class)
+@SpringBootTest()
+@ActiveProfiles("test-unit")
 class RegistrationControllerTest {
-  RegistrationController controller;
+  @Autowired private WebApplicationContext context;
 
-  @Mock UserService userService;
+  @Autowired UserService userService;
+
+  private MockMvc mvc;
 
   @BeforeEach
   void setUp() {
-    MockitoAnnotations.openMocks(this);
+    mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+  }
 
-    controller = new RegistrationController(userService);
+  @AfterEach
+  void cleanUp() {
+    reset(userService);
   }
 
   @Test
   void view() throws Exception {
-    MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
-    mockMvc.perform(get("/register")).andExpect(status().isOk());
+    mvc.perform(get("/register")).andExpect(status().isOk());
   }
 
   @Test
   void create() throws Exception {
     final String USERNAME = "username";
-    final String UNENCODED_PASSWORD = "unencoded password";
-
-    MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+    final String UNENCODED_PASSWORD = "1Password";
 
     User user = new User();
 
     ArgumentCaptor<User> captor = ArgumentCaptor.forClass(User.class);
 
+    when(userService.findByUsername(USERNAME)).thenReturn(null);
+
     when(userService.save(any(User.class))).thenReturn(user);
 
-    mockMvc
-        .perform(
+    mvc.perform(
             post("/register")
+                .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("username", USERNAME)
                 .param("password", UNENCODED_PASSWORD))
@@ -68,5 +79,51 @@ class RegistrationControllerTest {
     User userToSave = captor.getValue();
 
     assertEquals(USERNAME, userToSave.getUsername());
+  }
+
+  @Test
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void createWithDuplicateUsername() throws Exception {
+    final String USERNAME = "phil";
+    final String UNENCODED_PASSWORD = "1Password";
+
+    User user = new User();
+    user.setPassword(UNENCODED_PASSWORD);
+    user.setUsername(USERNAME);
+
+    when(userService.findByUsername(USERNAME)).thenReturn(user);
+
+    mvc.perform(
+            post("/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", USERNAME)
+                .param("password", UNENCODED_PASSWORD))
+        .andExpect(MockMvcResultMatchers.view().name("auth/register"));
+
+    verify(userService, never()).save(any());
+  }
+
+  @Test
+  void createWithInvalidPassword() throws Exception {
+    final String USERNAME = "phil";
+    final String UNENCODED_PASSWORD = "password";
+
+    User user = new User();
+    user.setPassword(UNENCODED_PASSWORD);
+    user.setUsername(USERNAME);
+
+    when(userService.findByUsername(USERNAME)).thenReturn(null);
+
+    mvc.perform(
+            post("/register")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", USERNAME)
+                .param("password", UNENCODED_PASSWORD))
+        .andExpect(MockMvcResultMatchers.view().name("auth/register"));
+
+    verify(userService, never()).save(any());
   }
 }

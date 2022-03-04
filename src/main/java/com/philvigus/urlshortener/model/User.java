@@ -1,9 +1,13 @@
 package com.philvigus.urlshortener.model;
 
+import com.philvigus.urlshortener.security.UniqueUsername;
+import com.philvigus.urlshortener.security.ValidPassword;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,10 +20,14 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotNull
+  @Size(min = 3, max = 30)
   @Column(nullable = false, unique = true, length = 50)
+  @UniqueUsername
   private String username;
 
   @Column(nullable = false, length = 64)
+  @ValidPassword
   private String password;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

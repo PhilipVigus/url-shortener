@@ -1,14 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Url Shortener</title>
+<head th:replace="fragments/head :: head(title='URL Shortner')">
 </head>
 <body>
-<h1>Url Shortener</h1>
-<h3><a th:href="@{/register}">Register</a></h3>
-<form th:action="@{/login}" method="post">
-    <input type="submit" value="Login"/>
-</form>
+<div class="container-fluid vh-100">
+    <div class="row h-100 justify-content-center">
+        <div class="col-sm-12 col-lg-8 bg-dark text-white">
+            <div class="d-flex h-100 justify-content-center align-items-center flex-column">
+                <h1>Welcome to Wibbly</h1>
+                <p>A simple URL shortener written in Java</p>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-4">
+            <div class="d-flex h-100 justify-content-center align-items-center flex-column">
+                <a class="btn btn-lg btn-primary w-75 w-md-50" href="login">
+                    Sign in
+                </a>
+                <a class="btn btn-lg btn-outline-primary w-75 w-md-50 mt-4" href="register">
+                    Sign up
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
