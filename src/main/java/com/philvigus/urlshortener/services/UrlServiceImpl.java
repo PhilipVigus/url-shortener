@@ -54,7 +54,7 @@ public class UrlServiceImpl implements UrlService {
   }
 
   @Override
-  public void delete(Url url) {
-    urlRepository.deleteByShortUrl(url.getShortUrl());
+  public void deleteById(long id) {
+    urlRepository.deleteById(id);
   }
 }
