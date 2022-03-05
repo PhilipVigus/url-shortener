@@ -34,7 +34,7 @@
     </div>
 </nav>
 
-<form name="add-url" th:action="@{/dashboard}" th:object="${url}" method="post">
+<form name="add-url" th:action="@{/urls}" th:object="${url}" method="post">
     <div class="form-group">
         <label for="url">Url</label>
         <input type="url" id="url" name="url" placeholder="url" required th:field="*{fullUrl}">
@@ -54,10 +54,17 @@
                     <thead>
                     <th scope="col">Full</th>
                     <th scope="col">Short</th>
+                    <th scope="col">-</th>
                     </thead>
                     <tbody th:each="url : ${urls}">
                     <td th:text="${url.getFullUrl()}"></td>
                     <td th:text="${url.getShortUrl()}"></td>
+                    <td>
+                        <form name="add-url" th:action="@{/urls/{id}(id=${url.id})}" method="post">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <button class="btn btn-primary" type="submit">Delete URL</button>
+                        </form>
+                    </td>
                     </tbody>
                 </table>
             </div>
