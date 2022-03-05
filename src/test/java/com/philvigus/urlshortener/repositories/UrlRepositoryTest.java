@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -57,5 +59,22 @@ class UrlRepositoryTest {
 
     assertTrue(savedUrl.isPresent());
     assertEquals(SHORT_URL, savedUrl.get().getShortUrl());
+  }
+
+  @Test
+  public void deleteByShortUrl() {
+    final String SHORT_URL = "abc";
+
+    Url url = new Url();
+    url.setShortUrl(SHORT_URL);
+
+    urlRepository.save(url);
+    urlRepository.deleteByShortUrl(SHORT_URL);
+
+    Set<Url> urls = new HashSet<>();
+
+    urlRepository.findAll().forEach(urls::add);
+
+    assertEquals(0, urls.size());
   }
 }
