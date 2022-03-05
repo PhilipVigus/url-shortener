@@ -52,4 +52,9 @@ public class UrlServiceImpl implements UrlService {
 
     return urls;
   }
+
+  @Override
+  public void delete(Url url) {
+    urlRepository.deleteByShortUrl(url.getShortUrl());
+  }
 }

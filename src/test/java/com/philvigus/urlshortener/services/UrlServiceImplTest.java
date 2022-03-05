@@ -57,4 +57,16 @@ class UrlServiceImplTest {
 
     verify(urlRepository, times(1)).findAll();
   }
+
+  @Test
+  public void deletes() {
+    final String SHORT_URL = "short";
+
+    Url url = new Url();
+    url.setShortUrl(SHORT_URL);
+
+    urlService.delete(url);
+
+    verify(urlRepository, times(1)).deleteByShortUrl(SHORT_URL);
+  }
 }

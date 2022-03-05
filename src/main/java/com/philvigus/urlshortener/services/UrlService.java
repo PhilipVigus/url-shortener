@@ -14,4 +14,6 @@ public interface UrlService {
   Optional<Url> findByShortUrl(String shortUrl);
 
   Set<Url> findAll();
+
+  void delete(Url url);
 }
