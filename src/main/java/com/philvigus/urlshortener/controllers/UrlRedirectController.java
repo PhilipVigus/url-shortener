@@ -28,7 +28,7 @@ public class UrlRedirectController {
     }
 
     return ResponseEntity.status(HttpStatus.FOUND)
-        .location(URI.create("https://www.google.com"))
+        .location(URI.create(url.get().getFullUrl()))
         .build();
   }
 }

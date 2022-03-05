@@ -34,6 +34,15 @@
     </div>
 </nav>
 
+<form name="add-url" th:action="@{/dashboard}" th:object="${url}" method="post">
+    <div class="form-group">
+        <label for="url">Url</label>
+        <input type="url" id="url" name="url" placeholder="url" required th:field="*{fullUrl}">
+    </div>
+
+    <button class="btn btn-primary" type="submit">Add URL</button>
+</form>
+
 <div class="container mt-8 border-dark">
     <div class="align-items-center">
         <div class="card">
