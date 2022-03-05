@@ -42,6 +42,7 @@ class UrlRedirectControllerTest {
 
     Url url = new Url();
     url.setShortUrl("short");
+    url.setFullUrl("long");
 
     when(urlService.findByShortUrl("short")).thenReturn(Optional.of(url));
 
