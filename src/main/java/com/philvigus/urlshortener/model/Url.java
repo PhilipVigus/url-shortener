@@ -20,4 +20,9 @@ public class Url {
 
   private String fullUrl;
   private String shortUrl;
+
+  @PreRemove
+  private void removeUrlFromUser() {
+    user.getUrls().remove(this);
+  }
 }

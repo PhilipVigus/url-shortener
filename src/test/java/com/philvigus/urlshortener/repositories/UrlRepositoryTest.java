@@ -19,19 +19,6 @@ class UrlRepositoryTest {
   @Autowired UrlRepository urlRepository;
 
   @Test
-  public void save() {
-    Url url = new Url();
-
-    urlRepository.save(url);
-
-    Optional<Url> savedUrl = urlRepository.findById(url.getId());
-
-    assertNotNull(url.getId());
-    assertTrue(savedUrl.isPresent());
-    assertEquals(url, savedUrl.get());
-  }
-
-  @Test
   public void findByFullUrl() {
     final String FULL_URL = "www.test.com";
 

@@ -20,8 +20,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ActiveProfiles("test")
@@ -82,8 +81,9 @@ class DashboardControllerTest {
   @Test
   public void AnAuthedUserCanCreateAUrl() throws Exception {
     final String FULL_URL = "https://www.google.com";
+
     mvc.perform(
-            post("/dashboard")
+            post("/urls")
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("fullUrl", FULL_URL))
@@ -97,5 +97,27 @@ class DashboardControllerTest {
     Url url = urls.stream().findFirst().get();
 
     assertEquals(FULL_URL, url.getFullUrl());
+  }
+
+  @WithMockUser(username = "phil", password = "password")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @Test
+  public void AnAuthedUserCanDeleteAUrl() throws Exception {
+    final String FULL_URL = "full";
+    final String SHORT_URL = "short";
+
+    Url url = urlService.findByFullUrl(FULL_URL).get();
+
+    mvc.perform(
+            delete("/urls/" + url.getId())
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(MockMvcResultMatchers.view().name("redirect:/dashboard"));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(0, urls.size());
   }
 }
