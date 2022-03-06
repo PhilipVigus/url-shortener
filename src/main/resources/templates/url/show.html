@@ -13,6 +13,8 @@
                 <div>
                     <p>Full url: <span th:text="${url.getFullUrl()}"></span></p>
                     <p>Short url: <span th:text="${url.getShortUrl()}"></span></p>
+                    <p>Number of clicks: <span th:text="${url.getNumberOfClicks()
+                    }"></span></p>
                 </div>
                 <div>
                     <form name="delete-url" th:action="@{/urls/{id}(id=${url.id})}" method="post">
