@@ -18,4 +18,6 @@ public interface UrlService {
   void deleteById(long id);
 
   Optional<Url> findById(long id);
+
+  Url incrementNumberOfClicks(Url url);
 }
