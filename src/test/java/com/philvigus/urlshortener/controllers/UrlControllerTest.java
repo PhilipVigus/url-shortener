@@ -55,7 +55,7 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @Test
-  void anAuthedUserCanDeleteAUrl() throws Exception {
+  public void anAuthedUserCanDeleteAUrl() throws Exception {
     final String FULL_URL = "full";
 
     Url url = urlService.findByFullUrl(FULL_URL).get();

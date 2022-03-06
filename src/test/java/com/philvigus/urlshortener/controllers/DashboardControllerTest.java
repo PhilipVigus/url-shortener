@@ -55,7 +55,7 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @Test
-  public void AnAuthedUserSeesTheirUrls() throws Exception {
+  public void anAuthedUserSeesTheirUrls() throws Exception {
     mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
 
     Set<Url> urls = urlService.findAll();
@@ -67,7 +67,7 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @Test
-  public void AnAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
+  public void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
     mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
 
     Set<Url> urls = urlService.findAll();
@@ -79,7 +79,7 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @Test
-  public void AnAuthedUserCanCreateAUrl() throws Exception {
+  public void anAuthedUserCanCreateAUrl() throws Exception {
     final String FULL_URL = "https://www.google.com";
 
     mvc.perform(
