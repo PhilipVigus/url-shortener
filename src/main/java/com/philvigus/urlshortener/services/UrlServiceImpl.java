@@ -27,9 +27,10 @@ public class UrlServiceImpl implements UrlService {
     long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
     byte[] bytes = String.valueOf(time).getBytes();
 
-    // calculate short url
     String shortUrl = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     url.setShortUrl(shortUrl);
+
+    url.setNumberOfClicks(0);
 
     return urlRepository.save(url);
   }
@@ -61,5 +62,12 @@ public class UrlServiceImpl implements UrlService {
   @Override
   public Optional<Url> findById(long id) {
     return urlRepository.findById(id);
+  }
+
+  @Override
+  public Url incrementNumberOfClicks(Url url) {
+    url.setNumberOfClicks(url.getNumberOfClicks() + 1);
+
+    return urlRepository.save(url);
   }
 }

@@ -20,6 +20,7 @@ public class Url {
 
   private String fullUrl;
   private String shortUrl;
+  private long numberOfClicks;
 
   @PreRemove
   private void removeUrlFromUser() {

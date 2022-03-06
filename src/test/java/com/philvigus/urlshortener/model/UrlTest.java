@@ -39,4 +39,13 @@ class UrlTest {
 
     assertEquals(SHORT_URL, url.getShortUrl());
   }
+
+  @Test
+  public void setNumberOfClicks() {
+    final long NUMBER_OF_CLICKS = 1L;
+
+    url.setNumberOfClicks(NUMBER_OF_CLICKS);
+
+    assertEquals(NUMBER_OF_CLICKS, url.getNumberOfClicks());
+  }
 }

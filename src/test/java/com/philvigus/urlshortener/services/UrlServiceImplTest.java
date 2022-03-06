@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 class UrlServiceImplTest {
   private UrlService urlService;
 
   @Mock UrlRepository urlRepository;
+
+  @Mock Url mockedUrl;
 
   @BeforeEach
   void setUp() {
@@ -74,5 +75,16 @@ class UrlServiceImplTest {
     urlService.findById(ID);
 
     verify(urlRepository, times(1)).findById(ID);
+  }
+
+  @Test
+  public void incrementNumberOfClicks() {
+    final long INITIAL_NUMBER_OF_CLICKS = 0L;
+    when(mockedUrl.getNumberOfClicks()).thenReturn(INITIAL_NUMBER_OF_CLICKS);
+
+    urlService.incrementNumberOfClicks(mockedUrl);
+
+    verify(mockedUrl, times(1)).getNumberOfClicks();
+    verify(mockedUrl, times(1)).setNumberOfClicks(INITIAL_NUMBER_OF_CLICKS + 1);
   }
 }

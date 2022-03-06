@@ -27,6 +27,8 @@ public class UrlRedirectController {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
+    urlService.incrementNumberOfClicks(url.get());
+
     return ResponseEntity.status(HttpStatus.FOUND)
         .location(URI.create(url.get().getFullUrl()))
         .build();

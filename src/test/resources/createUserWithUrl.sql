@@ -3,5 +3,5 @@ INSERT INTO USER
 VALUES (1, 'phil', '$2a$10$iU3hkEGMprkgUu.VvXck3uNcMLEnsgsX2hTDdBLNTOQJkiiUQSluC');
 
 INSERT INTO URL
-    (id, full_url, short_url, user_id)
-VALUES (1, 'full', 'short', 1);
+    (id, full_url, short_url, user_id, number_of_clicks)
+VALUES (1, 'full', 'short', 1, 0);
