@@ -51,6 +51,31 @@ class UrlControllerTest {
         .andExpect(status().isOk());
   }
 
+  @Test
+  public void aGuestUserCannotAccessTheDashboard() throws Exception {
+    mvc.perform(get("/urls/1")).andExpect(status().is3xxRedirection());
+  }
+
+  @WithMockUser(username = "su", password = "password")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @Test
+  public void anAuthedUserCannotAccessAnotherUsersUrl() throws Exception {
+    Set<Url> urls = urlService.findAll();
+
+    Url url = urls.stream().findFirst().get();
+
+    mvc.perform(get("/urls/" + url.getId())).andExpect(status().isForbidden());
+  }
+
+  @WithMockUser(username = "phil", password = "password")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @Test
+  public void anAuthedUserCannotAccessAUrlThatDoesntExist() throws Exception {
+    mvc.perform(get("/urls/1")).andExpect(status().isNotFound());
+  }
+
   @WithMockUser(username = "phil", password = "password")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
