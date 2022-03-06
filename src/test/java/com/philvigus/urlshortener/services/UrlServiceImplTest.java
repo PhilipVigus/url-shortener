@@ -60,13 +60,19 @@ class UrlServiceImplTest {
 
   @Test
   public void deleteById() {
-    final String SHORT_URL = "short";
+    final long ID = 1L;
 
-    Url url = new Url();
-    url.setId(1L);
+    urlService.deleteById(ID);
 
-    urlService.deleteById(url.getId());
+    verify(urlRepository, times(1)).deleteById(ID);
+  }
 
-    verify(urlRepository, times(1)).deleteById(url.getId());
+  @Test
+  public void findById() {
+    final long ID = 1L;
+
+    urlService.findById(ID);
+
+    verify(urlRepository, times(1)).findById(ID);
   }
 }

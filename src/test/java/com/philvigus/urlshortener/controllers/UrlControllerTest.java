@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ActiveProfiles("test")
 @SpringBootTest
-class DashboardControllerTest {
+class UrlControllerTest {
   @Autowired private WebApplicationContext context;
 
   @Autowired private UrlService urlService;
@@ -41,61 +41,59 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @Test
-  public void anAuthedUserCanAccessTheDashboard() throws Exception {
+  public void anAuthedUserCanAccessTheirUrl() throws Exception {
+    Set<Url> urls = urlService.findAll();
 
-    mvc.perform(get("/dashboard")).andExpect(view().name("dashboard")).andExpect(status().isOk());
+    Url url = urls.stream().findFirst().get();
+
+    mvc.perform(get("/urls/" + url.getId()))
+        .andExpect(view().name("url/show"))
+        .andExpect(status().isOk());
   }
 
   @Test
   public void aGuestUserCannotAccessTheDashboard() throws Exception {
-    mvc.perform(get("/dashboard")).andExpect(status().is3xxRedirection());
+    mvc.perform(get("/urls/1")).andExpect(status().is3xxRedirection());
+  }
+
+  @WithMockUser(username = "su", password = "password")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @Test
+  public void anAuthedUserCannotAccessAnotherUsersUrl() throws Exception {
+    Set<Url> urls = urlService.findAll();
+
+    Url url = urls.stream().findFirst().get();
+
+    mvc.perform(get("/urls/" + url.getId())).andExpect(status().isForbidden());
+  }
+
+  @WithMockUser(username = "phil", password = "password")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @Test
+  public void anAuthedUserCannotAccessAUrlThatDoesntExist() throws Exception {
+    mvc.perform(get("/urls/1")).andExpect(status().isNotFound());
   }
 
   @WithMockUser(username = "phil", password = "password")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @Test
-  public void anAuthedUserSeesTheirUrls() throws Exception {
-    mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
+  public void anAuthedUserCanDeleteAUrl() throws Exception {
+    final String FULL_URL = "full";
 
-    Set<Url> urls = urlService.findAll();
-
-    assertEquals(1, urls.size());
-  }
-
-  @WithMockUser(username = "phil", password = "password")
-  @Sql("classpath:createUserWithoutUrl.sql")
-  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  @Test
-  public void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
-    mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
-
-    Set<Url> urls = urlService.findAll();
-
-    assertEquals(0, urls.size());
-  }
-
-  @WithMockUser(username = "phil", password = "password")
-  @Sql("classpath:createUserWithoutUrl.sql")
-  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  @Test
-  public void anAuthedUserCanCreateAUrl() throws Exception {
-    final String FULL_URL = "https://www.google.com";
+    Url url = urlService.findByFullUrl(FULL_URL).get();
 
     mvc.perform(
-            post("/urls")
+            delete("/urls/" + url.getId())
                 .with(csrf())
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("fullUrl", FULL_URL))
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().is3xxRedirection())
         .andExpect(MockMvcResultMatchers.view().name("redirect:/dashboard"));
 
     Set<Url> urls = urlService.findAll();
 
-    assertEquals(1, urls.size());
-
-    Url url = urls.stream().findFirst().get();
-
-    assertEquals(FULL_URL, url.getFullUrl());
+    assertEquals(0, urls.size());
   }
 }

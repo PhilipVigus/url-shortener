@@ -57,4 +57,9 @@ public class UrlServiceImpl implements UrlService {
   public void deleteById(long id) {
     urlRepository.deleteById(id);
   }
+
+  @Override
+  public Optional<Url> findById(long id) {
+    return urlRepository.findById(id);
+  }
 }

@@ -16,4 +16,6 @@ public interface UrlService {
   Set<Url> findAll();
 
   void deleteById(long id);
+
+  Optional<Url> findById(long id);
 }
