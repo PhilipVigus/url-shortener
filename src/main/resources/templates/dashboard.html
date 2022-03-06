@@ -50,23 +50,13 @@
                 Your Existing URLs
             </h2>
             <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                    <th scope="col">Full</th>
-                    <th scope="col">Short</th>
-                    <th scope="col">-</th>
-                    </thead>
-                    <tbody th:each="url : ${urls}">
-                    <td th:text="${url.getFullUrl()}"></td>
-                    <td th:text="${url.getShortUrl()}"></td>
-                    <td>
-                        <form name="add-url" th:action="@{/urls/{id}(id=${url.id})}" method="post">
-                            <input type="hidden" name="_method" value="delete"/>
-                            <button class="btn btn-primary" type="submit">Delete URL</button>
-                        </form>
-                    </td>
-                    </tbody>
-                </table>
+                <ul th:each="url : ${urls}">
+                    <li>
+                        <a th:href="@{'/urls/' + ${url.getId()}}"
+                           th:text="${url.getFullUrl()} + ' - ' + ${url.getShortUrl()}">
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
