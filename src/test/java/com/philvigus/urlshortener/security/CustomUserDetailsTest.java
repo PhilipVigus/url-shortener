@@ -2,6 +2,7 @@ package com.philvigus.urlshortener.security;
 
 import com.philvigus.urlshortener.model.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -9,6 +10,7 @@ import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@DisplayName("CustomUserDetails")
 class CustomUserDetailsTest {
   private CustomUserDetails customUserDetails;
 
@@ -22,11 +24,13 @@ class CustomUserDetailsTest {
   }
 
   @Test
+  @DisplayName("getAuthorities - returns null")
   void getAuthorities() {
     assertNull(customUserDetails.getAuthorities());
   }
 
   @Test
+  @DisplayName("getPassword - calls getPassword on the wrapped User")
   void getPassword() {
     final String PASSWORD = "password";
 
@@ -37,6 +41,7 @@ class CustomUserDetailsTest {
   }
 
   @Test
+  @DisplayName("getUsername - calls getUsername on the wrapped User")
   void getUsername() {
     final String USERNAME = "username";
 
@@ -47,21 +52,25 @@ class CustomUserDetailsTest {
   }
 
   @Test
+  @DisplayName("isAccountNonExpired - returns true")
   void isAccountNonExpired() {
     assertTrue(customUserDetails.isAccountNonExpired());
   }
 
   @Test
+  @DisplayName("isAccountNonLocked - returns true")
   void isAccountNonLocked() {
     assertTrue(customUserDetails.isAccountNonLocked());
   }
 
   @Test
+  @DisplayName("isCredentialsNonExpired - returns true")
   void isCredentialsNonExpired() {
     assertTrue(customUserDetails.isCredentialsNonExpired());
   }
 
   @Test
+  @DisplayName("isEnabled - returns true")
   void isEnabled() {
     assertTrue(customUserDetails.isEnabled());
   }
