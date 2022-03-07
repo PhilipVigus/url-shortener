@@ -1,10 +1,12 @@
 package com.philvigus.urlshortener.model;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@DisplayName("Url model")
 class UrlTest {
   Url url;
 
@@ -14,6 +16,7 @@ class UrlTest {
   }
 
   @Test
+  @DisplayName("setId - ID correctly set")
   public void setId() {
     final Long ID = 1L;
 
@@ -23,8 +26,9 @@ class UrlTest {
   }
 
   @Test
+  @DisplayName("setFullUrl - full URL correctly set")
   public void setFullUrl() {
-    final String FULL_URL = "www.test.com";
+    final String FULL_URL = "long";
 
     url.setFullUrl(FULL_URL);
 
@@ -32,8 +36,9 @@ class UrlTest {
   }
 
   @Test
+  @DisplayName("setShortUrl - short URL correctly set")
   public void setShortUrl() {
-    final String SHORT_URL = "abcde";
+    final String SHORT_URL = "short";
 
     url.setShortUrl(SHORT_URL);
 
@@ -41,6 +46,7 @@ class UrlTest {
   }
 
   @Test
+  @DisplayName("setNumberOfClicks - number of clicks correctly set")
   public void setNumberOfClicks() {
     final long NUMBER_OF_CLICKS = 1L;
 
