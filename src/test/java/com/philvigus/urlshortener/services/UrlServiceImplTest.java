@@ -4,12 +4,14 @@ import com.philvigus.urlshortener.model.Url;
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.repositories.UrlRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.mockito.Mockito.*;
 
+@DisplayName("UrlServiceImpl")
 class UrlServiceImplTest {
   private UrlService urlService;
 
@@ -25,6 +27,7 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName("save - calls save on the URL repository with the given URL model")
   public void save() {
     Url url = new Url();
     User user = new User();
@@ -35,8 +38,9 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName("findByFullUrl - calls findByFullUrl on the URL repository with the given full URL")
   public void findByFullUrl() {
-    final String FULL_URL = "www.test.com";
+    final String FULL_URL = "long";
 
     urlService.findByFullUrl(FULL_URL);
 
@@ -44,6 +48,8 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName(
+      "findByShortUrl - calls findByShortUrl on the URL repository with the given short URL")
   public void findByShortUrl() {
     final String SHORT_URL = "short";
 
@@ -53,6 +59,7 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName("findAll - calls findAll on the URL repository")
   public void findAll() {
     urlService.findAll();
 
@@ -60,6 +67,7 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName("deleteById - calls findAll on the URL repository with the given ID")
   public void deleteById() {
     final long ID = 1L;
 
@@ -69,6 +77,7 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName("findById - calls findById on the URL repository with the given ID")
   public void findById() {
     final long ID = 1L;
 
@@ -78,6 +87,7 @@ class UrlServiceImplTest {
   }
 
   @Test
+  @DisplayName("incrementNumberOfClicks - calls incrementNumberOfClicks on the URL repository")
   public void incrementNumberOfClicks() {
     final long INITIAL_NUMBER_OF_CLICKS = 0L;
     when(mockedUrl.getNumberOfClicks()).thenReturn(INITIAL_NUMBER_OF_CLICKS);
