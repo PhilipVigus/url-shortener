@@ -20,6 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest()
@@ -57,7 +58,7 @@ class RegistrationControllerTest {
                 .param("username", USERNAME)
                 .param("password", UNENCODED_PASSWORD))
         .andExpect(status().is3xxRedirection())
-        .andExpect(MockMvcResultMatchers.view().name("redirect:login"));
+        .andExpect(redirectedUrl("login"));
 
     User createdUser = userService.findByUsername(USERNAME);
 
