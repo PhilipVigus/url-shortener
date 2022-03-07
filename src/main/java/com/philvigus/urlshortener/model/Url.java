@@ -1,5 +1,6 @@
 package com.philvigus.urlshortener.model;
 
+import com.philvigus.urlshortener.security.UniqueShortUrl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,7 +20,10 @@ public class Url {
   private User user;
 
   private String fullUrl;
+
+  @UniqueShortUrl
   private String shortUrl;
+
   private long numberOfClicks;
 
   @PreRemove
