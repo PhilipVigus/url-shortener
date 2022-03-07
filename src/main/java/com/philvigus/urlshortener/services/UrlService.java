@@ -9,7 +9,7 @@ import java.util.Set;
 public interface UrlService {
   Url save(Url url, User urlOwner);
 
-  Optional<Url> findByFullUrl(String fullUrl);
+  Set<Url> findByFullUrl(String fullUrl);
 
   Optional<Url> findByShortUrl(String shortUrl);
 

@@ -3,6 +3,7 @@ package com.philvigus.urlshortener.services;
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -10,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+@DisplayName("UserServiceImpl")
 class UserServiceImplTest {
   private UserServiceImpl userService;
 
@@ -22,6 +24,7 @@ class UserServiceImplTest {
   }
 
   @Test
+  @DisplayName("save - calls save on the user repository with the given User model")
   void save() {
     User user = new User();
 
@@ -31,6 +34,8 @@ class UserServiceImplTest {
   }
 
   @Test
+  @DisplayName(
+      "findByUsername - calls findByUsername on the user repository with the given username")
   void findByUsername() {
     final String USERNAME = "username";
 

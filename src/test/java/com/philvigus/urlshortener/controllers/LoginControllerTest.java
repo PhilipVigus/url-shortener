@@ -1,70 +1,74 @@
 package com.philvigus.urlshortener.controllers;
 
-import com.philvigus.urlshortener.config.TestConfig;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    classes = TestConfig.class)
+@SpringBootTest()
 @ActiveProfiles("test")
+@DisplayName("LoginController")
 public class LoginControllerTest {
-  @Autowired private TestRestTemplate testRestTemplate;
+  @Autowired private WebApplicationContext context;
 
-  @Test
-  public void aUserCanLoadTheLoginPage() throws Exception {
-    ResponseEntity<String> response = this.testRestTemplate.getForEntity("/login", String.class);
+  private MockMvc mvc;
 
-    assertEquals(HttpStatus.OK, response.getStatusCode());
+  @BeforeEach
+  void setUp() {
+    mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
   }
 
   @Test
-  public void anUnregisteredUserCannotLogin() throws Exception {
-    MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+  @DisplayName("Can view the login page")
+  void view() throws Exception {
+    mvc.perform(get("/login")).andExpect(status().isOk());
+  }
 
-    form.set("username", "phil");
-    form.set("password", "password");
+  @Test
+  @DisplayName("A unregistered user cannot log in")
+  void guestUserLogin() throws Exception {
+    final String USERNAME = "username";
+    final String UNENCODED_PASSWORD = "1Password";
 
-    ResponseEntity<String> response =
-        this.testRestTemplate.postForEntity(
-            "/login", new HttpEntity<>(form, new HttpHeaders()), String.class);
-
-    String responseLocation = response.getHeaders().getFirst("Location");
-
-    assertEquals(HttpStatus.FOUND, response.getStatusCode());
-    assertThat(responseLocation, containsString("error=true"));
+    mvc.perform(
+            post("/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", USERNAME)
+                .param("password", UNENCODED_PASSWORD))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/login?error=true"));
   }
 
   @Test
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  public void aRegisteredUserCanLogin() throws Exception {
-    MultiValueMap<String, String> form = new LinkedMultiValueMap<>();
+  @DisplayName("A registered user can log in")
+  void registeredUserLogin() throws Exception {
+    final String USERNAME = "username";
+    final String UNENCODED_PASSWORD = "password";
 
-    form.set("username", "phil");
-    form.set("password", "password");
-
-    ResponseEntity<String> response =
-        this.testRestTemplate.postForEntity(
-            "/login", new HttpEntity<>(form, new HttpHeaders()), String.class);
-
-    String responseLocation = response.getHeaders().getFirst("Location");
-
-    assertEquals(HttpStatus.FOUND, response.getStatusCode());
-    assertThat(responseLocation, containsString("dashboard"));
+    mvc.perform(
+            post("/login")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("username", USERNAME)
+                .param("password", UNENCODED_PASSWORD))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/dashboard"));
   }
 }
