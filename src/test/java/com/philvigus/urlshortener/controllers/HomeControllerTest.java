@@ -22,7 +22,7 @@ public class HomeControllerTest {
   private MockMvc mvc;
 
   @Test
-  @DisplayName("Can be accessed")
+  @DisplayName("Can view the home page")
   public void youCanAccessTheHomepage() throws Exception {
     mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
