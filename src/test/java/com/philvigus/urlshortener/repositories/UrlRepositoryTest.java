@@ -17,12 +17,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
 @DataJpaTest
-@DisplayName("User repository")
+@DisplayName("URL repository")
 class UrlRepositoryTest {
   @Autowired UrlRepository urlRepository;
 
   @Test
-  @DisplayName("findByFullUrl - finds only URLs with given full url")
+  @DisplayName("findByFullUrl - finds only URLs with the given full url")
   public void findByFullUrl() {
     final String FULL_URL = "full";
     final String DIFFERENT_FULL_URL = "different";
@@ -48,7 +48,7 @@ class UrlRepositoryTest {
   }
 
   @Test
-  @DisplayName("findByFullUrl - finds the URL with given short url")
+  @DisplayName("findByFullUrl - finds the URL with the given short url")
   public void findByShortUrl() {
     final String SHORT_URL = "short";
 
