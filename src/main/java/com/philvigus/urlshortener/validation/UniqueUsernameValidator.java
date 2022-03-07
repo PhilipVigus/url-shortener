@@ -1,4 +1,4 @@
-package com.philvigus.urlshortener.security;
+package com.philvigus.urlshortener.validation;
 
 import com.philvigus.urlshortener.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

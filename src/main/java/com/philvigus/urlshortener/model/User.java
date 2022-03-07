@@ -1,7 +1,7 @@
 package com.philvigus.urlshortener.model;
 
-import com.philvigus.urlshortener.security.UniqueUsername;
-import com.philvigus.urlshortener.security.ValidPassword;
+import com.philvigus.urlshortener.validation.UniqueUsername;
+import com.philvigus.urlshortener.validation.ValidPassword;
 import lombok.Getter;
 import lombok.Setter;
 
