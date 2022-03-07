@@ -56,6 +56,7 @@ public class LoginControllerTest {
 
   @Test
   @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("A registered user can log in")
   void registeredUserLogin() throws Exception {
     final String USERNAME = "username";
