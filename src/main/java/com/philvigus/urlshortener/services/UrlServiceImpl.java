@@ -36,7 +36,7 @@ public class UrlServiceImpl implements UrlService {
   }
 
   @Override
-  public Optional<Url> findByFullUrl(String fullUrl) {
+  public Set<Url> findByFullUrl(String fullUrl) {
     return urlRepository.findByFullUrl(fullUrl);
   }
 

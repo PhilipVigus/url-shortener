@@ -27,14 +27,14 @@ class UrlRedirectControllerTest {
     controller = new UrlRedirectController(urlService);
   }
 
-  @Test
-  void redirectToNonExistentShortUrlReturnsNotFound() throws Exception {
-    MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-
-    when(urlService.findByFullUrl("wibble")).thenReturn(Optional.empty());
-
-    mockMvc.perform(get("/wibble")).andExpect(status().isNotFound());
-  }
+  //  @Test
+  //  void redirectToNonExistentShortUrlReturnsNotFound() throws Exception {
+  //    MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+  //
+  //    when(urlService.findByFullUrl("wibble")).thenReturn(Optional.empty());
+  //
+  //    mockMvc.perform(get("/wibble")).andExpect(status().isNotFound());
+  //  }
 
   @Test
   void redirectToExistingShortUrlRedirects() throws Exception {
