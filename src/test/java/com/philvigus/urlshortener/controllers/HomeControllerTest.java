@@ -1,6 +1,6 @@
 package com.philvigus.urlshortener.controllers;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,18 +15,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class HomeControllerIntegrationTest {
+@DisplayName("HomeController")
+public class HomeControllerTest {
   @Autowired private WebApplicationContext context;
 
   private MockMvc mvc;
 
-  @BeforeEach
-  void setUp() {
-    mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
-  }
-
   @Test
+  @DisplayName("Can be accessed")
   public void youCanAccessTheHomepage() throws Exception {
+    mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+
     mvc.perform(get("/")).andExpect(status().isOk());
     ;
   }
