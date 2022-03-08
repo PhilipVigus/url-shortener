@@ -17,7 +17,8 @@ class UserServiceImplTest {
 
   @Mock UserRepository userRepository;
 
-  public @BeforeEach void setUp() {
+  @BeforeEach
+  void setUp() {
     MockitoAnnotations.openMocks(this);
 
     userService = new UserServiceImpl(userRepository);

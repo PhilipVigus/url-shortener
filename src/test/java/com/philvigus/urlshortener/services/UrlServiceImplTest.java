@@ -28,7 +28,7 @@ class UrlServiceImplTest {
 
   @Test
   @DisplayName("save - calls save on the URL repository with the given URL model")
-  public void save() {
+  void save() {
     Url url = new Url();
     User user = new User();
 
@@ -39,7 +39,7 @@ class UrlServiceImplTest {
 
   @Test
   @DisplayName("findByFullUrl - calls findByFullUrl on the URL repository with the given full URL")
-  public void findByFullUrl() {
+  void findByFullUrl() {
     final String FULL_URL = "long";
 
     urlService.findByFullUrl(FULL_URL);
@@ -50,7 +50,7 @@ class UrlServiceImplTest {
   @Test
   @DisplayName(
       "findByShortUrl - calls findByShortUrl on the URL repository with the given short URL")
-  public void findByShortUrl() {
+  void findByShortUrl() {
     final String SHORT_URL = "short";
 
     urlService.findByFullUrl(SHORT_URL);
@@ -60,7 +60,7 @@ class UrlServiceImplTest {
 
   @Test
   @DisplayName("findAll - calls findAll on the URL repository")
-  public void findAll() {
+  void findAll() {
     urlService.findAll();
 
     verify(urlRepository, times(1)).findAll();
@@ -68,7 +68,7 @@ class UrlServiceImplTest {
 
   @Test
   @DisplayName("deleteById - calls findAll on the URL repository with the given ID")
-  public void deleteById() {
+  void deleteById() {
     final long ID = 1L;
 
     urlService.deleteById(ID);
@@ -78,7 +78,7 @@ class UrlServiceImplTest {
 
   @Test
   @DisplayName("findById - calls findById on the URL repository with the given ID")
-  public void findById() {
+  void findById() {
     final long ID = 1L;
 
     urlService.findById(ID);
@@ -88,7 +88,7 @@ class UrlServiceImplTest {
 
   @Test
   @DisplayName("incrementNumberOfClicks - calls incrementNumberOfClicks on the URL repository")
-  public void incrementNumberOfClicks() {
+  void incrementNumberOfClicks() {
     final long INITIAL_NUMBER_OF_CLICKS = 0L;
     when(mockedUrl.getNumberOfClicks()).thenReturn(INITIAL_NUMBER_OF_CLICKS);
 

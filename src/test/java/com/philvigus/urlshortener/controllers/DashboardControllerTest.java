@@ -45,13 +45,13 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can view their dashboard")
-  public void anAuthedUserCanAccessTheDashboard() throws Exception {
+   void anAuthedUserCanAccessTheDashboard() throws Exception {
     mvc.perform(get("/dashboard")).andExpect(view().name("dashboard")).andExpect(status().isOk());
   }
 
   @Test
   @DisplayName("A guest user is redirected to the login screen")
-  public void aGuestUserCannotAccessTheDashboard() throws Exception {
+   void aGuestUserCannotAccessTheDashboard() throws Exception {
     mvc.perform(get("/dashboard")).andExpect(status().is3xxRedirection());
   }
 
@@ -60,7 +60,7 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can see their URLs")
-  public void anAuthedUserSeesTheirUrls() throws Exception {
+   void anAuthedUserSeesTheirUrls() throws Exception {
     mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
 
     Set<Url> urls = urlService.findAll();
@@ -73,7 +73,7 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user with no URLs sees no URLs")
-  public void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
+   void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
     mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
 
     Set<Url> urls = urlService.findAll();
@@ -86,7 +86,7 @@ class DashboardControllerTest {
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can create a URL")
-  public void anAuthedUserCanCreateAUrl() throws Exception {
+   void anAuthedUserCanCreateAUrl() throws Exception {
     final String FULL_URL = "https://www.google.com";
 
     mvc.perform(
