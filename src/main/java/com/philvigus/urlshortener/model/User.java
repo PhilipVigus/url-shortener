@@ -31,5 +31,6 @@ public class User {
   private String password;
 
   @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @OrderBy(value = "id")
   private Set<Url> urls = new HashSet<>();
 }
