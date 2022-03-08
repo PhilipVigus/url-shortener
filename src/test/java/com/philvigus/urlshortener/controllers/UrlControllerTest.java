@@ -46,7 +46,7 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can view their URL")
-  public void anAuthedUserCanAccessTheirUrl() throws Exception {
+  void anAuthedUserCanAccessTheirUrl() throws Exception {
     Set<Url> urls = urlService.findAll();
 
     Url url = urls.stream().findFirst().get();
@@ -58,7 +58,7 @@ class UrlControllerTest {
 
   @Test
   @DisplayName("An guest user cannot view a URL")
-  public void aGuestUserCannotViewAUrl() throws Exception {
+  void aGuestUserCannotViewAUrl() throws Exception {
     mvc.perform(get("/urls/1")).andExpect(status().is3xxRedirection());
   }
 
@@ -67,7 +67,7 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user cannot view another user's URL")
-  public void anAuthedUserCannotAccessAnotherUsersUrl() throws Exception {
+  void anAuthedUserCannotAccessAnotherUsersUrl() throws Exception {
     Set<Url> urls = urlService.findAll();
 
     Url url = urls.stream().findFirst().get();
@@ -80,7 +80,7 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user cannot view a URL that doesn't exist")
-  public void anAuthedUserCannotAccessAUrlThatDoesntExist() throws Exception {
+  void anAuthedUserCannotAccessAUrlThatDoesntExist() throws Exception {
     mvc.perform(get("/urls/1")).andExpect(status().isNotFound());
   }
 
@@ -89,7 +89,7 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can delete a URL")
-  public void anAuthedUserCanDeleteAUrl() throws Exception {
+  void anAuthedUserCanDeleteAUrl() throws Exception {
     final String FULL_URL = "full";
 
     Set<Url> urls = urlService.findByFullUrl(FULL_URL);

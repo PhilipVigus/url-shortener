@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "url")
+@Table(name = "urls")
 public class Url {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

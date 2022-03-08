@@ -1,4 +1,4 @@
 DELETE
-FROM Url;
+FROM urls;
 DELETE
-FROM User;
+FROM users;

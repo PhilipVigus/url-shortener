@@ -11,13 +11,13 @@ class UrlTest {
   Url url;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     url = new Url();
   }
 
   @Test
   @DisplayName("setId - ID correctly set")
-  public void setId() {
+  void setId() {
     final Long ID = 1L;
 
     url.setId(ID);
@@ -27,7 +27,7 @@ class UrlTest {
 
   @Test
   @DisplayName("setFullUrl - full URL correctly set")
-  public void setFullUrl() {
+  void setFullUrl() {
     final String FULL_URL = "long";
 
     url.setFullUrl(FULL_URL);
@@ -37,7 +37,7 @@ class UrlTest {
 
   @Test
   @DisplayName("setShortUrl - short URL correctly set")
-  public void setShortUrl() {
+  void setShortUrl() {
     final String SHORT_URL = "short";
 
     url.setShortUrl(SHORT_URL);
@@ -47,7 +47,7 @@ class UrlTest {
 
   @Test
   @DisplayName("setNumberOfClicks - number of clicks correctly set")
-  public void setNumberOfClicks() {
+  void setNumberOfClicks() {
     final long NUMBER_OF_CLICKS = 1L;
 
     url.setNumberOfClicks(NUMBER_OF_CLICKS);

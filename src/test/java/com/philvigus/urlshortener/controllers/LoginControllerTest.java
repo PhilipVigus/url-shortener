@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest()
 @ActiveProfiles("test")
 @DisplayName("LoginController")
-public class LoginControllerTest {
+class LoginControllerTest {
   @Autowired private WebApplicationContext context;
 
   private MockMvc mvc;

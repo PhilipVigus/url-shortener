@@ -23,7 +23,7 @@ class UrlRepositoryTest {
 
   @Test
   @DisplayName("findByFullUrl - finds only URLs with the given full url")
-  public void findByFullUrl() {
+  void findByFullUrl() {
     final String FULL_URL = "full";
     final String DIFFERENT_FULL_URL = "different";
 
@@ -49,7 +49,7 @@ class UrlRepositoryTest {
 
   @Test
   @DisplayName("findByFullUrl - finds the URL with the given short url")
-  public void findByShortUrl() {
+  void findByShortUrl() {
     final String SHORT_URL = "short";
 
     Url url = new Url();
