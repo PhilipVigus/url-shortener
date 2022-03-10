@@ -18,6 +18,7 @@ public class Url {
   @JoinColumn(name = "user_id")
   private User user;
 
+  @Column(columnDefinition = "text")
   private String fullUrl;
 
   private String shortUrl;
