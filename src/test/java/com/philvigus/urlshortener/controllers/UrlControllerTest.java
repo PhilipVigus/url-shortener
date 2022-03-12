@@ -50,7 +50,7 @@ class UrlControllerTest {
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(get("/urls/" + url.getId()))
-        .andExpect(view().name("url/show"))
+        .andExpect(view().name("url/view"))
         .andExpect(status().isOk());
   }
 
