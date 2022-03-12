@@ -78,4 +78,20 @@ public class UrlController {
 
     return "url/add";
   }
+
+  @PutMapping("/urls")
+  public String update(
+      @AuthenticationPrincipal UserDetails authedUserDetails,
+      @Valid @ModelAttribute Url url,
+      BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return "url/show";
+    }
+
+    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+
+    urlService.update(url, authedUser);
+
+    return "redirect:/dashboard";
+  }
 }

@@ -20,4 +20,6 @@ public interface UrlService {
   Optional<Url> findById(long id);
 
   Url incrementNumberOfClicks(Url url);
+
+  Url update(Url url, User urlOwner);
 }

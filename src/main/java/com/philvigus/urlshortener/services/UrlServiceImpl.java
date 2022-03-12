@@ -69,6 +69,20 @@ public class UrlServiceImpl implements UrlService {
     return urlRepository.save(url);
   }
 
+  @Override
+  public Url update(Url url, User user) {
+    Optional<Url> existingUrl = findById(url.getId());
+
+    if (!existingUrl.isPresent()) {
+      return save(url, user);
+    }
+
+    existingUrl.get().setShortUrl(url.getShortUrl());
+    existingUrl.get().setFullUrl(url.getFullUrl());
+
+    return urlRepository.save(existingUrl.get());
+  }
+
   private String calculateUniqueShortUrl() {
     String shortUrl;
     Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();

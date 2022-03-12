@@ -191,4 +191,32 @@ class UrlControllerTest {
 
     assertEquals(1, urls.size());
   }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can edit their URL")
+  void anAuthedUserCanEditTheirUrl() throws Exception {
+    final String ID = "1";
+    final String FULL_URL = "https://edited.com";
+    final String SHORT_URL = "edited";
+
+    mvc.perform(
+        put("/urls/")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("id", ID)
+            .param("fullUrl", FULL_URL)
+            .param("shortUrl", SHORT_URL));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
+
+    Url url = urls.stream().findFirst().get();
+
+    assertEquals(FULL_URL, url.getFullUrl());
+    assertEquals(SHORT_URL, url.getShortUrl());
+  }
 }
