@@ -15,17 +15,6 @@
     </div>
 </nav>
 
-<div class="border-0 p-4 bg-dark w-100">
-    <form class="d-flex flex-row align-items-center mx-auto w-75" name="add-url" th:action="@{/urls}" th:object="${url}"
-          method="post">
-        <div class="input-group">
-            <input type="url" id="url" name="url" class="form-control" placeholder="Full URL" required
-                   th:field="*{fullUrl}">
-            <button class="btn btn-primary" type="submit" id="button-addon2">Add URL</button>
-        </div>
-    </form>
-</div>
-
 <div class="container mt-8 border-dark align-items-center mx-auto w-75">
     <div class="card mt-4">
         <h2 class="card-header bg-dark text-white fs-2">
@@ -40,9 +29,9 @@
                     <div class="col-sm-5" th:text="${url.getFullUrl()}"></div>
                 </a>
             </div>
+            <a href="/urls/add">Add Url</a>
         </div>
     </div>
-
 </div>
 </body>
 </html>

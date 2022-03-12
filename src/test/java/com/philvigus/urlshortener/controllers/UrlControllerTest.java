@@ -106,4 +106,18 @@ class UrlControllerTest {
 
     assertEquals(0, remainingUrls.size());
   }
+
+  @Test
+  @WithMockUser(username = "username", password = "password")
+  @DisplayName("An authed user can view the add URL page")
+  void anAuthedUserCanViewTheAddUrlPage() throws Exception {
+
+    mvc.perform(get("/urls/add")).andExpect(view().name("url/add")).andExpect(status().isOk());
+  }
+
+  @Test
+  @DisplayName("An guest user cannot view a URL")
+  void aGuestUserCannotViewTheAddUrlPage() throws Exception {
+    mvc.perform(get("/urls/add")).andExpect(status().is3xxRedirection());
+  }
 }

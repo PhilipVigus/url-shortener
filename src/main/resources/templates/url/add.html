@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:replace="fragments/head :: head(title='URL Shortner')">
+</head>
+
+<body style="padding-top: 5rem">
+
+<nav class="navbar navbar-dark bg-dark fixed-top" aria-label="Main nav bar">
+    <div class="container-fluid justify-content-between ps-4">
+        <div class="navbar-brand fs-2">Wibbly</div>
+
+        <form th:action="@{/logout}" method="post">
+            <input class="btn nav-item text-white" type="submit" value="Logout"/>
+        </form>
+    </div>
+</nav>
+
+<div class="border-0 p-4 bg-dark w-100">
+    <form class="d-flex flex-row align-items-center mx-auto w-75" name="add-url" th:action="@{/urls}" th:object="${url}"
+          method="post">
+        <div class="input-group">
+            <input type="url" id="url" name="url" class="form-control" placeholder="Full URL" required
+                   th:field="*{fullUrl}">
+            <button class="btn btn-primary" type="submit" id="button-addon2">Add URL</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

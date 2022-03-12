@@ -62,4 +62,12 @@ public class UrlController {
 
     return "url/show";
   }
+
+  @GetMapping("/urls/add")
+  public String add(@ModelAttribute Url url, Model model) {
+
+    model.addAttribute("url", url);
+
+    return "url/add";
+  }
 }
