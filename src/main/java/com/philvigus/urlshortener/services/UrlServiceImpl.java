@@ -24,11 +24,13 @@ public class UrlServiceImpl implements UrlService {
   public Url save(Url url, User urlOwner) {
     url.setUser(urlOwner);
 
-    long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
-    byte[] bytes = String.valueOf(time).getBytes();
+    if (url.getShortUrl() == null) {
+      long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
+      byte[] bytes = String.valueOf(time).getBytes();
 
-    String shortUrl = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-    url.setShortUrl(shortUrl);
+      String shortUrl = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
+      url.setShortUrl(shortUrl);
+    }
 
     url.setNumberOfClicks(0);
 

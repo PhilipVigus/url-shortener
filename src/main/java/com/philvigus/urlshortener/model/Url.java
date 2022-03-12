@@ -1,5 +1,6 @@
 package com.philvigus.urlshortener.model;
 
+import com.philvigus.urlshortener.validation.UniqueShortUrl;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +22,7 @@ public class Url {
   @Column(columnDefinition = "text")
   private String fullUrl;
 
-  private String shortUrl;
+  @UniqueShortUrl private String shortUrl;
 
   private long numberOfClicks;
 

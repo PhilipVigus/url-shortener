@@ -21,10 +21,8 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -119,5 +117,78 @@ class UrlControllerTest {
   @DisplayName("An guest user cannot view a URL")
   void aGuestUserCannotViewTheAddUrlPage() throws Exception {
     mvc.perform(get("/urls/add")).andExpect(status().is3xxRedirection());
+  }
+
+  @Test
+  @WithMockUser(username = "username", password = "password")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can create a URL with no short URL specified")
+  void anAuthedUserCanCreateAUrlWIthNoShortUrlSpecified() throws Exception {
+    final String FULL_URL = "https://www.google.com";
+
+    mvc.perform(
+        post("/urls/")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("fullUrl", FULL_URL));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
+
+    Url url = urls.stream().findFirst().get();
+
+    assertEquals(FULL_URL, url.getFullUrl());
+  }
+
+  @Test
+  @WithMockUser(username = "username", password = "password")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can create a URL with a custom short URL")
+  void anAuthedUserCanCreateAUrlWIthACustomShortUrl() throws Exception {
+    final String FULL_URL = "https://www.google.com";
+    final String SHORT_URL = "custom";
+
+    mvc.perform(
+        post("/urls/")
+            .with(csrf())
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .param("fullUrl", FULL_URL)
+            .param("shortUrl", SHORT_URL));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
+
+    Url url = urls.stream().findFirst().get();
+
+    assertEquals(FULL_URL, url.getFullUrl());
+    assertEquals(SHORT_URL, url.getShortUrl());
+  }
+
+  @Test
+  @WithMockUser(username = "username", password = "password")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can create a URL with a custom short URL")
+  void anAuthedUserCannotCreateAUrlWIthADuplicateCustomShortUrl() throws Exception {
+    final String FULL_URL = "https://www.google.com";
+    final String SHORT_URL = "short";
+
+    mvc.perform(
+            post("/urls/")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("fullUrl", FULL_URL)
+                .param("shortUrl", SHORT_URL))
+        .andExpect(MockMvcResultMatchers.view().name("url/add"))
+        .andExpect(model().attributeHasFieldErrors("url", "shortUrl"));
+    ;
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
   }
 }

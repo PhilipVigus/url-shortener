@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.util.Optional;
 import java.util.Set;
@@ -60,5 +61,16 @@ class UrlRepositoryTest {
 
     assertTrue(savedUrl.isPresent());
     assertEquals(SHORT_URL, savedUrl.get().getShortUrl());
+  }
+
+  @Test
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  void save() {
+    final String SHORT_URL = "short";
+
+    Url url = new Url();
+    url.setShortUrl(SHORT_URL);
+    urlRepository.save(url);
   }
 }

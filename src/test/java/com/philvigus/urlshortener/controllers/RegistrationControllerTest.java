@@ -20,8 +20,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest()
 @ActiveProfiles("test")
@@ -79,7 +78,8 @@ class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("username", USERNAME)
                 .param("password", UNENCODED_PASSWORD))
-        .andExpect(MockMvcResultMatchers.view().name("auth/register"));
+        .andExpect(MockMvcResultMatchers.view().name("auth/register"))
+        .andExpect(model().attributeHasFieldErrors("user", "username"));
   }
 
   @Test
@@ -94,6 +94,7 @@ class RegistrationControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("username", USERNAME)
                 .param("password", UNENCODED_PASSWORD))
-        .andExpect(MockMvcResultMatchers.view().name("auth/register"));
+        .andExpect(MockMvcResultMatchers.view().name("auth/register"))
+        .andExpect(model().attributeHasFieldErrors("user", "password"));
   }
 }
