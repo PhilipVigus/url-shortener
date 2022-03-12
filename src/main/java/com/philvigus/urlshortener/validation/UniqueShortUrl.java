@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Constraint(validatedBy = UniqueShortUrlValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 public @interface UniqueShortUrl {
 
   String message() default "Short URL already taken";

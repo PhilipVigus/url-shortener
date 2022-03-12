@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -81,7 +82,10 @@ public class UrlController {
       @AuthenticationPrincipal UserDetails authedUserDetails,
       @Valid @ModelAttribute Url url,
       BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
+
+    bindingResult = convertGlobalErrors(bindingResult);
+
+    if (bindingResult.hasFieldErrors()) {
       return "url/add";
     }
 
@@ -98,7 +102,9 @@ public class UrlController {
       @PathVariable("id") long id,
       @Valid @ModelAttribute Url url,
       BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
+    bindingResult = convertGlobalErrors(bindingResult);
+
+    if (bindingResult.hasFieldErrors()) {
       return "url/view";
     }
 
@@ -117,5 +123,13 @@ public class UrlController {
     urlService.update(url, authedUser);
 
     return "redirect:/dashboard";
+  }
+
+  private BindingResult convertGlobalErrors(BindingResult bindingResult) {
+    if (bindingResult.getGlobalErrors().size() > 0) {
+      bindingResult.addError(new FieldError("url", "shortUrl", "Short URL already in use"));
+    }
+
+    return bindingResult;
   }
 }

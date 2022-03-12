@@ -4,7 +4,9 @@ import com.philvigus.urlshortener.model.Url;
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.repositories.UrlRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 
+import java.net.URI;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.HashSet;
@@ -27,6 +29,8 @@ public class UrlServiceImpl implements UrlService {
     if (url.getShortUrl().equals("")) {
       url.setShortUrl(calculateUniqueShortUrl());
     }
+
+    url.setFullUrl(encodeString(url.getFullUrl()));
 
     url.setNumberOfClicks(0);
 
@@ -77,8 +81,12 @@ public class UrlServiceImpl implements UrlService {
       return save(url, user);
     }
 
-    existingUrl.get().setShortUrl(url.getShortUrl());
-    existingUrl.get().setFullUrl(url.getFullUrl());
+    String newShortUrl = url.getShortUrl().equals("")
+            ? calculateUniqueShortUrl()
+            : url.getShortUrl();
+
+    existingUrl.get().setShortUrl(newShortUrl);
+    existingUrl.get().setFullUrl(encodeString(url.getFullUrl()));
 
     return urlRepository.save(existingUrl.get());
   }
@@ -97,5 +105,13 @@ public class UrlServiceImpl implements UrlService {
         return shortUrl;
       }
     }
+  }
+
+  private String encodeString(String string) {
+    DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
+    factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.TEMPLATE_AND_VALUES);
+    URI uri = factory.uriString(string).build();
+
+    return uri.toString();
   }
 }
