@@ -24,11 +24,9 @@ public class UrlServiceImpl implements UrlService {
   public Url save(Url url, User urlOwner) {
     url.setUser(urlOwner);
 
-    long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
-    byte[] bytes = String.valueOf(time).getBytes();
-
-    String shortUrl = Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
-    url.setShortUrl(shortUrl);
+    if (url.getShortUrl().equals("")) {
+      url.setShortUrl(calculateUniqueShortUrl());
+    }
 
     url.setNumberOfClicks(0);
 
@@ -69,5 +67,21 @@ public class UrlServiceImpl implements UrlService {
     url.setNumberOfClicks(url.getNumberOfClicks() + 1);
 
     return urlRepository.save(url);
+  }
+
+  private String calculateUniqueShortUrl() {
+    String shortUrl;
+    Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+
+    while (true) {
+      long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
+      byte[] bytes = String.valueOf(time).getBytes();
+
+      shortUrl = encoder.encodeToString(bytes);
+
+      if (!findByShortUrl(shortUrl).isPresent()) {
+        return shortUrl;
+      }
+    }
   }
 }

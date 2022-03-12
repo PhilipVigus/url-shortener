@@ -7,12 +7,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = UniqueUsernameValidator.class)
+@Constraint(validatedBy = UniqueShortUrlValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface UniqueUsername {
+public @interface UniqueShortUrl {
 
-  String message() default "Username already taken";
+  String message() default "Short URL already taken";
 
   Class<?>[] groups() default {};
 

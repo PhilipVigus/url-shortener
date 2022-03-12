@@ -19,14 +19,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class HomeControllerTest {
   @Autowired private WebApplicationContext context;
 
-  private MockMvc mvc;
-
   @Test
   @DisplayName("Can view the home page")
   void youCanAccessTheHomepage() throws Exception {
-    mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
+    MockMvc mvc = MockMvcBuilders.webAppContextSetup(context).apply(springSecurity()).build();
 
     mvc.perform(get("/")).andExpect(status().isOk());
-    ;
   }
 }

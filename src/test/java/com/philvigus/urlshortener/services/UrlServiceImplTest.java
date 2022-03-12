@@ -30,6 +30,10 @@ class UrlServiceImplTest {
   @DisplayName("save - calls save on the URL repository with the given URL model")
   void save() {
     Url url = new Url();
+
+    url.setShortUrl("short");
+    url.setFullUrl("long");
+
     User user = new User();
 
     urlService.save(url, user);
