@@ -1,65 +1,48 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:replace="fragments/head :: head(title='URL Shortner')">
 </head>
 
-<body>
+<body style="padding-top: 3rem">
+
 <nav class="navbar navbar-dark bg-dark fixed-top" aria-label="Main nav bar">
-    <div class="container-fluid">
-        <div class="navbar-brand">Wibbly</div>
+    <div class="container-fluid justify-content-between ps-4">
+        <div class="navbar-brand fs-2">Wibbly</div>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
-                aria-controls="menu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="menu">
-            <ul class="navbar-nav me-auto mb-2">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                <li class="nav-item">
-                    <form th:action="@{/logout}" method="post">
-                        <input type="submit" value="Logout"/>
-                    </form>
-                </li>
-            </ul>
-        </div>
+        <form th:action="@{/logout}" method="post">
+            <input class="btn nav-item text-white" type="submit" value="Logout"/>
+        </form>
     </div>
 </nav>
 
-<form name="add-url" th:action="@{/urls}" th:object="${url}" method="post">
-    <div class="form-group">
-        <label for="url">Url</label>
-        <input type="url" id="url" name="url" placeholder="url" required th:field="*{fullUrl}">
-    </div>
+<div class="border-0 p-4 bg-dark w-100">
+    <form class="d-flex flex-row align-items-center mx-auto w-75" name="add-url" th:action="@{/urls}" th:object="${url}"
+          method="post">
+        <div class="input-group">
+            <input type="url" id="url" name="url" class="form-control" placeholder="Full URL" required
+                   th:field="*{fullUrl}">
+            <button class="btn btn-primary" type="submit" id="button-addon2">Add URL</button>
+        </div>
+    </form>
+</div>
 
-    <button class="btn btn-primary" type="submit">Add URL</button>
-</form>
-
-<div class="container mt-8 border-dark">
-    <div class="align-items-center">
-        <div class="card">
-            <h2 class="card-header bg-dark text-white fs-2">
-                Your Existing URLs
-            </h2>
-            <div class="card-body">
-                <ul th:each="url : ${urls}">
-                    <li>
-                        <a th:href="@{'/urls/' + ${url.getId()}}"
-                           th:text="${url.getFullUrl()} + ' - ' + ${url.getShortUrl()}">
-                        </a>
-                    </li>
-                </ul>
+<div class="container mt-8 border-dark align-items-center mx-auto w-75">
+    <div class="card mt-4">
+        <h2 class="card-header bg-dark text-white fs-2">
+            <span sec:authentication="name"></span> - existing URLs (Click for details)
+        </h2>
+        <div class="card-body">
+            <div class="list-group-flush px-5" th:each="url : ${urls}">
+                <a class="list-group-item d-flex justify-content-between" th:href="@{'/urls/' + ${url.getId()}}">
+                    <div class="col-sm-5"
+                         th:text="${#httpServletRequest.getRequestURL().toString().replace(#httpServletRequest.getRequestURI(),'')} + '/' + ${url.getShortUrl()}"></div>
+                    <div class="col-sm-2 text-danger">redirects to</div>
+                    <div class="col-sm-5" th:text="${url.getFullUrl()}"></div>
+                </a>
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>
