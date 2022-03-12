@@ -1,7 +1,9 @@
 package com.philvigus.urlshortener.controllers;
 
 import com.philvigus.urlshortener.model.Url;
+import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.services.UrlService;
+import com.philvigus.urlshortener.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,6 +34,8 @@ class UrlControllerTest {
   @Autowired private WebApplicationContext context;
 
   @Autowired private UrlService urlService;
+
+  @Autowired private UserService userService;
 
   private MockMvc mvc;
 
@@ -288,5 +292,34 @@ class UrlControllerTest {
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", SHORT_URL))
         .andExpect(status().isNotFound());
+  }
+
+  @Test
+  @WithMockUser(username = "su")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can edit their URL")
+  void anAuthedUserCannotEditTheirUrlToUseAnExistingShortUrl() throws Exception {
+    final String FULL_URL = "https://www.edited.com";
+    final String SHORT_URL = "new";
+    User user = userService.findByUsername("username");
+
+    Url url = new Url();
+    url.setFullUrl(FULL_URL);
+    url.setShortUrl(SHORT_URL);
+
+    urlService.save(url, user);
+
+    Set<Url> urls = urlService.findAll();
+
+    mvc.perform(
+            put("/urls/" + url.getId())
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("fullUrl", FULL_URL)
+                .param("shortUrl", "short"))
+        .andExpect(status().isOk())
+        .andExpect(view().name("url/view"))
+        .andExpect(model().hasErrors());
   }
 }

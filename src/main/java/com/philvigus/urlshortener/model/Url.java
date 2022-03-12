@@ -6,11 +6,13 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "urls")
+@UniqueShortUrl
 public class Url {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +26,11 @@ public class Url {
   @NotNull
   private String fullUrl;
 
-  @NotNull @UniqueShortUrl private String shortUrl;
+  @NotNull
+  @Pattern(
+      regexp = "^[a-zA-z0-9_-]*$",
+      message = "The short URL most only contain letters, numbers, _ and -")
+  private String shortUrl;
 
   private long numberOfClicks;
 
