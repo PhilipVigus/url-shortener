@@ -172,7 +172,7 @@ class UrlControllerTest {
   @WithMockUser(username = "username", password = "password")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  @DisplayName("An authed user can create a URL with a custom short URL")
+  @DisplayName("An authed user cannot create a URL with a duplicate custom short URL")
   void anAuthedUserCannotCreateAUrlWIthADuplicateCustomShortUrl() throws Exception {
     final String FULL_URL = "https://www.google.com";
     final String SHORT_URL = "short";
