@@ -26,8 +26,51 @@ public class UrlController {
     this.userService = userService;
   }
 
+  @GetMapping("/urls/{id}")
+  public String view(
+      @AuthenticationPrincipal UserDetails authedUserDetails,
+      @PathVariable("id") long id,
+      Model model) {
+    Optional<Url> url = urlService.findById(id);
+
+    if (!url.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+
+    if (url.get().getUser() != authedUser) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
+    model.addAttribute("url", urlService.findById(id).get());
+
+    return "url/view";
+  }
+
+  @GetMapping("/urls/add")
+  public String add(@ModelAttribute Url url, Model model) {
+
+    model.addAttribute("url", url);
+
+    return "url/add";
+  }
+
   @DeleteMapping("/urls/{id}")
-  public String delete(@PathVariable("id") long id) {
+  public String delete(
+      @AuthenticationPrincipal UserDetails authedUserDetails, @PathVariable("id") long id) {
+    Optional<Url> urlToDelete = urlService.findById(id);
+
+    if (!urlToDelete.isPresent()) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+
+    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+
+    if (!urlToDelete.get().getUser().equals(authedUser)) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+    }
+
     urlService.deleteById(id);
 
     return "redirect:/dashboard";
@@ -49,46 +92,27 @@ public class UrlController {
     return "redirect:/dashboard";
   }
 
-  @GetMapping("/urls/{id}")
-  public String view(
+  @PutMapping("/urls/{id}")
+  public String update(
       @AuthenticationPrincipal UserDetails authedUserDetails,
       @PathVariable("id") long id,
-      Model model) {
-    Optional<Url> url = urlService.findById(id);
+      @Valid @ModelAttribute Url url,
+      BindingResult bindingResult) {
+    if (bindingResult.hasErrors()) {
+      return "url/view";
+    }
 
-    if (!url.isPresent()) {
+    Optional<Url> urlToUpdate = urlService.findById(id);
+
+    if (!urlToUpdate.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
-    if (url.get().getUser() != authedUser) {
+    if (!urlToUpdate.get().getUser().equals(authedUser)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
-
-    model.addAttribute("url", urlService.findById(id).get());
-
-    return "url/show";
-  }
-
-  @GetMapping("/urls/add")
-  public String add(@ModelAttribute Url url, Model model) {
-
-    model.addAttribute("url", url);
-
-    return "url/add";
-  }
-
-  @PutMapping("/urls")
-  public String update(
-      @AuthenticationPrincipal UserDetails authedUserDetails,
-      @Valid @ModelAttribute Url url,
-      BindingResult bindingResult) {
-    if (bindingResult.hasErrors()) {
-      return "url/show";
-    }
-
-    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     urlService.update(url, authedUser);
 

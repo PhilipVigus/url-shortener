@@ -23,12 +23,11 @@
                     </form>
                 </div>
                 <div>
-                    <form class="d-flex flex-row align-items-center mx-auto w-75" name="update-url" th:action="@{/urls}"
+                    <form class="d-flex flex-row align-items-center mx-auto w-75" name="update-url"
+                          th:action="@{/urls/{id}(id=${url.id})}"
                           th:object="${url}"
                           method="post">
                         <input type="hidden" name="_method" value="put"/>
-
-                        <input type="hidden" name="id" th:value="*{id}"/>
                         
                         <div class="input-group">
                             <input type="url" id="fullUrl" name="fullUrl" class="form-control" placeholder="Full URL"

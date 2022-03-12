@@ -19,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -44,9 +45,8 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can view their URL")
-  void anAuthedUserCanAccessTheirUrl() throws Exception {
+  void anAuthedUserCanViewTheirUrl() throws Exception {
     Set<Url> urls = urlService.findAll();
-
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(get("/urls/" + url.getId()))
@@ -55,7 +55,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @DisplayName("An guest user cannot view a URL")
+  @DisplayName("A guest user cannot view a URL")
   void aGuestUserCannotViewAUrl() throws Exception {
     mvc.perform(get("/urls/1")).andExpect(status().is3xxRedirection());
   }
@@ -64,10 +64,9 @@ class UrlControllerTest {
   @WithMockUser(username = "su")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  @DisplayName("An authed user cannot view another user's URL")
-  void anAuthedUserCannotAccessAnotherUsersUrl() throws Exception {
+  @DisplayName("An authed user cannot view someone else's URL")
+  void anAuthedUserCannotViewSomeoneElsesUrl() throws Exception {
     Set<Url> urls = urlService.findAll();
-
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(get("/urls/" + url.getId())).andExpect(status().isForbidden());
@@ -78,19 +77,17 @@ class UrlControllerTest {
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user cannot view a URL that doesn't exist")
-  void anAuthedUserCannotAccessAUrlThatDoesntExist() throws Exception {
+  void anAuthedUserCannotViewAUrlThatDoesntExist() throws Exception {
     mvc.perform(get("/urls/1")).andExpect(status().isNotFound());
   }
 
   @Test
-  @WithMockUser(username = "phil")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can delete a URL")
   void anAuthedUserCanDeleteAUrl() throws Exception {
-    final String FULL_URL = "full";
-
-    Set<Url> urls = urlService.findByFullUrl(FULL_URL);
+    Set<Url> urls = urlService.findAll();
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(
@@ -103,6 +100,36 @@ class UrlControllerTest {
     Set<Url> remainingUrls = urlService.findAll();
 
     assertEquals(0, remainingUrls.size());
+  }
+
+  @Test
+  @WithMockUser(username = "su")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user cannot delete someone else's URL")
+  void anAuthedUserCannotDeleteSomeoneElsesUrl() throws Exception {
+    Set<Url> urls = urlService.findAll();
+    Url url = urls.stream().findFirst().get();
+
+    mvc.perform(
+            delete("/urls/" + url.getId())
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        .andExpect(status().isForbidden());
+
+    Set<Url> remainingUrls = urlService.findAll();
+
+    assertEquals(1, remainingUrls.size());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user cannot delete a URL that doesn't exist")
+  void anAuthedUserCannotDeleteAUrlThatDoesntExist() throws Exception {
+    mvc.perform(delete("/urls/1").with(csrf()).contentType(MediaType.APPLICATION_FORM_URLENCODED))
+        .andExpect(status().isNotFound());
   }
 
   @Test
@@ -190,5 +217,76 @@ class UrlControllerTest {
     Set<Url> urls = urlService.findAll();
 
     assertEquals(1, urls.size());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can edit their URL")
+  void anAuthedUserCanEditTheirUrl() throws Exception {
+    final String FULL_URL = "https://www.edited.com";
+    final String SHORT_URL = "edited";
+
+    Set<Url> urls = urlService.findAll();
+    Url url = urls.stream().findFirst().get();
+
+    mvc.perform(
+            put("/urls/" + url.getId())
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("fullUrl", FULL_URL)
+                .param("shortUrl", SHORT_URL))
+        .andExpect(status().is3xxRedirection())
+        .andExpect(redirectedUrl("/dashboard"));
+
+    Url editedUrl = urlService.findById(url.getId()).get();
+
+    assertEquals(FULL_URL, editedUrl.getFullUrl());
+    assertEquals(SHORT_URL, editedUrl.getShortUrl());
+  }
+
+  @Test
+  @WithMockUser(username = "Su")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user cannot edit someone else's URL")
+  void anAuthedUserCannotEditSomeoneElsesUrl() throws Exception {
+    final String FULL_URL = "https://www.edited.com";
+    final String SHORT_URL = "edited";
+
+    Set<Url> urls = urlService.findAll();
+    Url url = urls.stream().findFirst().get();
+
+    mvc.perform(
+            put("/urls/" + url.getId())
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("fullUrl", FULL_URL)
+                .param("shortUrl", SHORT_URL))
+        .andExpect(status().isForbidden());
+
+    Url editedUrl = urlService.findById(url.getId()).get();
+
+    assertNotEquals(FULL_URL, editedUrl.getFullUrl());
+    assertNotEquals(SHORT_URL, editedUrl.getShortUrl());
+  }
+
+  @Test
+  @WithMockUser(username = "Su")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can edit their URL")
+  void anAuthedUserCannotEditAUrlThatDoesntExist() throws Exception {
+    final String FULL_URL = "https://www.edited.com";
+    final String SHORT_URL = "edited";
+
+    mvc.perform(
+            put("/urls/1")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("fullUrl", FULL_URL)
+                .param("shortUrl", SHORT_URL))
+        .andExpect(status().isNotFound());
   }
 }
