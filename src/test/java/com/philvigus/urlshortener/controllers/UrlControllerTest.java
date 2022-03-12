@@ -40,7 +40,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can view their URL")
@@ -61,7 +61,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "su", password = "password")
+  @WithMockUser(username = "su")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user cannot view another user's URL")
@@ -74,7 +74,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "phil", password = "password")
+  @WithMockUser(username = "phil")
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user cannot view a URL that doesn't exist")
@@ -83,7 +83,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "phil", password = "password")
+  @WithMockUser(username = "phil")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can delete a URL")
@@ -106,7 +106,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @DisplayName("An authed user can view the add URL page")
   void anAuthedUserCanViewTheAddUrlPage() throws Exception {
 
@@ -120,7 +120,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can create a URL with no short URL specified")
@@ -144,7 +144,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can create a URL with a custom short URL")
@@ -170,7 +170,7 @@ class UrlControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user cannot create a URL with a duplicate custom short URL")
@@ -186,7 +186,6 @@ class UrlControllerTest {
                 .param("shortUrl", SHORT_URL))
         .andExpect(MockMvcResultMatchers.view().name("url/add"))
         .andExpect(model().attributeHasFieldErrors("url", "shortUrl"));
-    ;
 
     Set<Url> urls = urlService.findAll();
 

@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 public @interface UniqueUsername {
 
-  public String message() default "Username already taken";
+  String message() default "Username already taken";
 
-  public Class<?>[] groups() default {};
+  Class<?>[] groups() default {};
 
-  public Class<? extends Payload>[] payload() default {};
+  Class<? extends Payload>[] payload() default {};
 }

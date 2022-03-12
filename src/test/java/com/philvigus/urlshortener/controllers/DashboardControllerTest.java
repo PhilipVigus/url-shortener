@@ -37,7 +37,7 @@ class DashboardControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can view their dashboard")
@@ -52,7 +52,7 @@ class DashboardControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can see their URLs")
@@ -65,7 +65,7 @@ class DashboardControllerTest {
   }
 
   @Test
-  @WithMockUser(username = "username", password = "password")
+  @WithMockUser(username = "username")
   @Sql("classpath:createUserWithoutUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user with no URLs sees no URLs")
