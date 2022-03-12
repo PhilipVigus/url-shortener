@@ -12,7 +12,7 @@ public class UniqueShortUrlValidator implements ConstraintValidator<UniqueShortU
 
   @Override
   public boolean isValid(String shortUrl, ConstraintValidatorContext context) {
-    if (!urlService.findByShortUrl(shortUrl).isPresent()) {
+    if (shortUrl == "" || !urlService.findByShortUrl(shortUrl).isPresent()) {
       return true;
     }
 
