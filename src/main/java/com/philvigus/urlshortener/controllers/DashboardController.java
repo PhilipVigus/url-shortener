@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.Set;
 
@@ -21,16 +20,12 @@ public class DashboardController {
   }
 
   @GetMapping("/dashboard")
-  public String view(
-      @AuthenticationPrincipal UserDetails authedUserDetails,
-      @ModelAttribute Url url,
-      Model model) {
+  public String view(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     Set<Url> urls = authedUser.getUrls();
 
     model.addAttribute("urls", urls);
-    model.addAttribute("url", url);
 
     return "dashboard";
   }
