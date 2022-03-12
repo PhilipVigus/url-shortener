@@ -26,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @ActiveProfiles("test")
-@DisplayName("RegistrationController")
+@DisplayName("UrlController")
 class UrlControllerTest {
   @Autowired private WebApplicationContext context;
 
@@ -131,7 +131,8 @@ class UrlControllerTest {
         post("/urls/")
             .with(csrf())
             .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            .param("fullUrl", FULL_URL));
+            .param("fullUrl", FULL_URL)
+            .param("shortUrl", ""));
 
     Set<Url> urls = urlService.findAll();
 

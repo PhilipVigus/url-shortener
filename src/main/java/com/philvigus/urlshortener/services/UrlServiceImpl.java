@@ -24,7 +24,7 @@ public class UrlServiceImpl implements UrlService {
   public Url save(Url url, User urlOwner) {
     url.setUser(urlOwner);
 
-    if (url.getShortUrl() == "") {
+    if (url.getShortUrl().equals("")) {
       url.setShortUrl(calculateUniqueShortUrl());
     }
 
@@ -70,7 +70,7 @@ public class UrlServiceImpl implements UrlService {
   }
 
   private String calculateUniqueShortUrl() {
-    String shortUrl = "";
+    String shortUrl;
     Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
 
     while (true) {
