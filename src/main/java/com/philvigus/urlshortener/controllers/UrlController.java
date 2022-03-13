@@ -28,7 +28,7 @@ public class UrlController {
     this.userService = userService;
   }
 
-  @GetMapping("/dashboard")
+  @GetMapping("/urls")
   public String view(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
@@ -36,7 +36,7 @@ public class UrlController {
 
     model.addAttribute("urls", urls);
 
-    return "dashboard";
+    return "urls/index";
   }
 
   @GetMapping("/urls/{id}")
@@ -86,7 +86,7 @@ public class UrlController {
 
     urlService.deleteById(id);
 
-    return "redirect:/dashboard";
+    return "redirect:/urls";
   }
 
   @PostMapping("/urls")
@@ -105,7 +105,7 @@ public class UrlController {
 
     urlService.save(url, authedUser);
 
-    return "redirect:/dashboard";
+    return "redirect:/urls";
   }
 
   @PutMapping("/urls/{id}")
@@ -134,7 +134,7 @@ public class UrlController {
 
     urlService.update(url, authedUser);
 
-    return "redirect:/dashboard";
+    return "redirect:/urls";
   }
 
   private BindingResult convertGlobalErrors(BindingResult bindingResult) {

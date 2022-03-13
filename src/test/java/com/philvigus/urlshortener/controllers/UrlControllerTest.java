@@ -47,7 +47,7 @@ class UrlControllerTest {
   @Test
   @DisplayName("A guest user is redirected to the login screen")
   void aGuestUserCannotViewAnyUrls() throws Exception {
-    mvc.perform(get("/dashboard")).andExpect(status().is3xxRedirection());
+    mvc.perform(get("/urls")).andExpect(status().is3xxRedirection());
   }
 
   @Test
@@ -56,9 +56,9 @@ class UrlControllerTest {
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user can see their URLs")
   void anAuthedUserSeesTheirUrls() throws Exception {
-    mvc.perform(get("/dashboard"))
+    mvc.perform(get("/urls"))
         .andExpect(model().attributeExists("urls"))
-        .andExpect(view().name("dashboard"))
+        .andExpect(view().name("urls/index"))
         .andExpect(status().isOk());
 
     Set<Url> urls = urlService.findAll();
@@ -72,7 +72,7 @@ class UrlControllerTest {
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
   @DisplayName("An authed user with no URLs sees no URLs")
   void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
-    mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
+    mvc.perform(get("/urls")).andExpect(model().attributeExists("urls"));
 
     Set<Url> urls = urlService.findAll();
 
@@ -134,7 +134,7 @@ class UrlControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().is3xxRedirection())
-        .andExpect(MockMvcResultMatchers.view().name("redirect:/dashboard"));
+        .andExpect(MockMvcResultMatchers.view().name("redirect:/urls"));
 
     Set<Url> remainingUrls = urlService.findAll();
 
@@ -277,7 +277,7 @@ class UrlControllerTest {
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", SHORT_URL))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/dashboard"));
+        .andExpect(redirectedUrl("/urls"));
 
     Url editedUrl = urlService.findById(url.getId()).get();
 
