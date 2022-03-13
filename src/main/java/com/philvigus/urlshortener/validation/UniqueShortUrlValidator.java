@@ -6,9 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 public class UniqueShortUrlValidator implements ConstraintValidator<UniqueShortUrl, Url> {
+  public static final List<String> FORBIDDEN_SHORT_URLS =
+      Collections.unmodifiableList(Arrays.asList("urls"));
 
   @Autowired private UrlService urlService;
 
@@ -17,6 +22,10 @@ public class UniqueShortUrlValidator implements ConstraintValidator<UniqueShortU
     // We are going to generate a random short url - we don't need to check anything
     if (urlBeingValidated.getShortUrl().equals("")) {
       return true;
+    }
+
+    if (UniqueShortUrlValidator.FORBIDDEN_SHORT_URLS.contains(urlBeingValidated.getShortUrl())) {
+      return false;
     }
 
     // It's a new URL, because the id isn't set
