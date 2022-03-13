@@ -4,6 +4,7 @@ import com.philvigus.urlshortener.model.Url;
 import com.philvigus.urlshortener.model.User;
 import com.philvigus.urlshortener.services.UrlService;
 import com.philvigus.urlshortener.services.UserService;
+import com.philvigus.urlshortener.validation.UniqueShortUrlValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -357,5 +358,29 @@ class UrlControllerTest {
         .andExpect(status().isOk())
         .andExpect(view().name("urls/view"))
         .andExpect(model().hasErrors());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user cannot create a URL using a short URL in the forbidden list")
+  void anAuthedUserCannotCreateAUrlUsingAShortUrlInTheForbiddenList() throws Exception {
+    final String FULL_URL = "https://www.google.com";
+    final String SHORT_URL =
+        UniqueShortUrlValidator.FORBIDDEN_SHORT_URLS.stream().findFirst().get();
+
+    mvc.perform(
+            post("/urls/")
+                .with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("fullUrl", FULL_URL)
+                .param("shortUrl", SHORT_URL))
+        .andExpect(MockMvcResultMatchers.view().name("urls/add"))
+        .andExpect(model().attributeHasFieldErrors("url", "shortUrl"));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
   }
 }
