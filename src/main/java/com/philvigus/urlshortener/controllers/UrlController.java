@@ -58,7 +58,7 @@ public class UrlController {
 
     model.addAttribute("url", urlService.findById(id).get());
 
-    return "url/view";
+    return "urls/view";
   }
 
   @GetMapping("/urls/add")
@@ -66,7 +66,7 @@ public class UrlController {
 
     model.addAttribute("url", url);
 
-    return "url/add";
+    return "urls/add";
   }
 
   @DeleteMapping("/urls/{id}")
@@ -98,7 +98,7 @@ public class UrlController {
     bindingResult = convertGlobalErrors(bindingResult);
 
     if (bindingResult.hasFieldErrors()) {
-      return "url/add";
+      return "urls/add";
     }
 
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
@@ -117,7 +117,7 @@ public class UrlController {
     bindingResult = convertGlobalErrors(bindingResult);
 
     if (bindingResult.hasFieldErrors()) {
-      return "url/view";
+      return "urls/view";
     }
 
     Optional<Url> urlToUpdate = urlService.findById(id);

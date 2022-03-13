@@ -89,7 +89,7 @@ class UrlControllerTest {
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(get("/urls/" + url.getId()))
-        .andExpect(view().name("url/view"))
+        .andExpect(view().name("urls/view"))
         .andExpect(status().isOk());
   }
 
@@ -176,7 +176,7 @@ class UrlControllerTest {
   @DisplayName("An authed user can view the add URL page")
   void anAuthedUserCanViewTheAddUrlPage() throws Exception {
 
-    mvc.perform(get("/urls/add")).andExpect(view().name("url/add")).andExpect(status().isOk());
+    mvc.perform(get("/urls/add")).andExpect(view().name("urls/add")).andExpect(status().isOk());
   }
 
   @Test
@@ -250,7 +250,7 @@ class UrlControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", SHORT_URL))
-        .andExpect(MockMvcResultMatchers.view().name("url/add"))
+        .andExpect(MockMvcResultMatchers.view().name("urls/add"))
         .andExpect(model().attributeHasFieldErrors("url", "shortUrl"));
 
     Set<Url> urls = urlService.findAll();
@@ -354,7 +354,7 @@ class UrlControllerTest {
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", "short"))
         .andExpect(status().isOk())
-        .andExpect(view().name("url/view"))
+        .andExpect(view().name("urls/view"))
         .andExpect(model().hasErrors());
   }
 }
