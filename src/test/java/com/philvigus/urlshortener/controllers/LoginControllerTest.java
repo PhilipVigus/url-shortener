@@ -69,6 +69,6 @@ class LoginControllerTest {
                 .param("username", USERNAME)
                 .param("password", UNENCODED_PASSWORD))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/dashboard"));
+        .andExpect(redirectedUrl("/urls"));
   }
 }

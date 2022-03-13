@@ -13,33 +13,37 @@ public class UniqueShortUrlValidator implements ConstraintValidator<UniqueShortU
   @Autowired private UrlService urlService;
 
   @Override
-  public boolean isValid(Url newUrl, ConstraintValidatorContext context) {
+  public boolean isValid(Url urlBeingValidated, ConstraintValidatorContext context) {
     // We are going to generate a random short url - we don't need to check anything
-    if (newUrl.getShortUrl().equals("")) {
+    if (urlBeingValidated.getShortUrl().equals("")) {
       return true;
     }
 
     // It's a new URL, because the id isn't set
-    if (newUrl.getId() == null) {
-      Optional<Url> optionalExistingUrlWithSameShortUrl =
-          urlService.findByShortUrl(newUrl.getShortUrl());
-
-      return !optionalExistingUrlWithSameShortUrl.isPresent();
+    if (urlBeingValidated.getId() == null) {
+      return isValidNewUrl(urlBeingValidated);
     }
 
-    Optional<Url> optionalExistingUrlWithSameId = urlService.findById(newUrl.getId());
+    Optional<Url> optionalExistingUrlWithSameId = urlService.findById(urlBeingValidated.getId());
 
-    // There's no existing Url with this id
-    // So make sure the short URL isn't already in use
+    // There's no existing Url with this id, so it's new URL
     if (!optionalExistingUrlWithSameId.isPresent()) {
-      Optional<Url> optionalExistingUrlWithSameShortUrl =
-          urlService.findByShortUrl(newUrl.getShortUrl());
-
-      return !optionalExistingUrlWithSameShortUrl.isPresent();
+      return isValidNewUrl(urlBeingValidated);
     }
 
+    return isValidExistingUrl(urlBeingValidated);
+  }
+
+  private boolean isValidNewUrl(Url urlBeingValidated) {
     Optional<Url> optionalExistingUrlWithSameShortUrl =
-        urlService.findByShortUrl(newUrl.getShortUrl());
+        urlService.findByShortUrl(urlBeingValidated.getShortUrl());
+
+    return !optionalExistingUrlWithSameShortUrl.isPresent();
+  }
+
+  private boolean isValidExistingUrl(Url urlBeingValidated) {
+    Optional<Url> optionalExistingUrlWithSameShortUrl =
+        urlService.findByShortUrl(urlBeingValidated.getShortUrl());
 
     // There's no existing Url with this short Url
     if (!optionalExistingUrlWithSameShortUrl.isPresent()) {
@@ -50,13 +54,12 @@ public class UniqueShortUrlValidator implements ConstraintValidator<UniqueShortU
 
     // There's an existing URL with the new URL's short URL, but it represents
     // the same one (ie it's being updated), so everything is good
-    if (existingUrlWithSameShortUrl.getId() == newUrl.getId()) {
+    if (existingUrlWithSameShortUrl.getId() == urlBeingValidated.getId()) {
       return true;
     }
 
-    // Phew - if we get this far it means we're trying to create or update an
-    // existing URL while setting it's short URL to the short URL of a different
-    // URL's short URL
+    // We're updating an existing URL and setting it's short URL to a value
+    // that's in use by another URL, so the update isn't valid
     return false;
   }
 }

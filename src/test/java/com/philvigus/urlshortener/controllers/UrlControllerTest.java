@@ -45,6 +45,41 @@ class UrlControllerTest {
   }
 
   @Test
+  @DisplayName("A guest user is redirected to the login screen")
+  void aGuestUserCannotViewAnyUrls() throws Exception {
+    mvc.perform(get("/urls")).andExpect(status().is3xxRedirection());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can see their URLs")
+  void anAuthedUserSeesTheirUrls() throws Exception {
+    mvc.perform(get("/urls"))
+        .andExpect(model().attributeExists("urls"))
+        .andExpect(view().name("urls/index"))
+        .andExpect(status().isOk());
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user with no URLs sees no URLs")
+  void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
+    mvc.perform(get("/urls")).andExpect(model().attributeExists("urls"));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(0, urls.size());
+  }
+
+  @Test
   @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
@@ -54,7 +89,7 @@ class UrlControllerTest {
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(get("/urls/" + url.getId()))
-        .andExpect(view().name("url/view"))
+        .andExpect(view().name("urls/view"))
         .andExpect(status().isOk());
   }
 
@@ -99,7 +134,8 @@ class UrlControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().is3xxRedirection())
-        .andExpect(MockMvcResultMatchers.view().name("redirect:/dashboard"));
+        .andExpect(redirectedUrl("/urls"));
+    ;
 
     Set<Url> remainingUrls = urlService.findAll();
 
@@ -141,7 +177,7 @@ class UrlControllerTest {
   @DisplayName("An authed user can view the add URL page")
   void anAuthedUserCanViewTheAddUrlPage() throws Exception {
 
-    mvc.perform(get("/urls/add")).andExpect(view().name("url/add")).andExpect(status().isOk());
+    mvc.perform(get("/urls/add")).andExpect(view().name("urls/add")).andExpect(status().isOk());
   }
 
   @Test
@@ -215,7 +251,7 @@ class UrlControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", SHORT_URL))
-        .andExpect(MockMvcResultMatchers.view().name("url/add"))
+        .andExpect(MockMvcResultMatchers.view().name("urls/add"))
         .andExpect(model().attributeHasFieldErrors("url", "shortUrl"));
 
     Set<Url> urls = urlService.findAll();
@@ -242,7 +278,7 @@ class UrlControllerTest {
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", SHORT_URL))
         .andExpect(status().is3xxRedirection())
-        .andExpect(redirectedUrl("/dashboard"));
+        .andExpect(redirectedUrl("/urls"));
 
     Url editedUrl = urlService.findById(url.getId()).get();
 
@@ -319,7 +355,7 @@ class UrlControllerTest {
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", "short"))
         .andExpect(status().isOk())
-        .andExpect(view().name("url/view"))
+        .andExpect(view().name("urls/view"))
         .andExpect(model().hasErrors());
   }
 }

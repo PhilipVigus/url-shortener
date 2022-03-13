@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UrlController {
@@ -25,6 +26,17 @@ public class UrlController {
   public UrlController(UrlService urlService, UserService userService) {
     this.urlService = urlService;
     this.userService = userService;
+  }
+
+  @GetMapping("/urls")
+  public String view(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
+    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+
+    Set<Url> urls = authedUser.getUrls();
+
+    model.addAttribute("urls", urls);
+
+    return "urls/index";
   }
 
   @GetMapping("/urls/{id}")
@@ -46,7 +58,7 @@ public class UrlController {
 
     model.addAttribute("url", urlService.findById(id).get());
 
-    return "url/view";
+    return "urls/view";
   }
 
   @GetMapping("/urls/add")
@@ -54,7 +66,7 @@ public class UrlController {
 
     model.addAttribute("url", url);
 
-    return "url/add";
+    return "urls/add";
   }
 
   @DeleteMapping("/urls/{id}")
@@ -74,7 +86,7 @@ public class UrlController {
 
     urlService.deleteById(id);
 
-    return "redirect:/dashboard";
+    return "redirect:/urls";
   }
 
   @PostMapping("/urls")
@@ -86,14 +98,14 @@ public class UrlController {
     bindingResult = convertGlobalErrors(bindingResult);
 
     if (bindingResult.hasFieldErrors()) {
-      return "url/add";
+      return "urls/add";
     }
 
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     urlService.save(url, authedUser);
 
-    return "redirect:/dashboard";
+    return "redirect:/urls";
   }
 
   @PutMapping("/urls/{id}")
@@ -105,7 +117,7 @@ public class UrlController {
     bindingResult = convertGlobalErrors(bindingResult);
 
     if (bindingResult.hasFieldErrors()) {
-      return "url/view";
+      return "urls/view";
     }
 
     Optional<Url> urlToUpdate = urlService.findById(id);
@@ -122,7 +134,7 @@ public class UrlController {
 
     urlService.update(url, authedUser);
 
-    return "redirect:/dashboard";
+    return "redirect:/urls";
   }
 
   private BindingResult convertGlobalErrors(BindingResult bindingResult) {
