@@ -16,6 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class UrlController {
@@ -25,6 +26,17 @@ public class UrlController {
   public UrlController(UrlService urlService, UserService userService) {
     this.urlService = urlService;
     this.userService = userService;
+  }
+
+  @GetMapping("/dashboard")
+  public String view(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
+    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+
+    Set<Url> urls = authedUser.getUrls();
+
+    model.addAttribute("urls", urls);
+
+    return "dashboard";
   }
 
   @GetMapping("/urls/{id}")
