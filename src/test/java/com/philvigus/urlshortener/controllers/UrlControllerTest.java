@@ -134,7 +134,8 @@ class UrlControllerTest {
                 .with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().is3xxRedirection())
-        .andExpect(MockMvcResultMatchers.view().name("redirect:/urls"));
+        .andExpect(redirectedUrl("/urls"));
+    ;
 
     Set<Url> remainingUrls = urlService.findAll();
 
