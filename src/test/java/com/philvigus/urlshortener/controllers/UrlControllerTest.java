@@ -45,6 +45,41 @@ class UrlControllerTest {
   }
 
   @Test
+  @DisplayName("A guest user is redirected to the login screen")
+  void aGuestUserCannotViewAnyUrls() throws Exception {
+    mvc.perform(get("/dashboard")).andExpect(status().is3xxRedirection());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user can see their URLs")
+  void anAuthedUserSeesTheirUrls() throws Exception {
+    mvc.perform(get("/dashboard"))
+        .andExpect(model().attributeExists("urls"))
+        .andExpect(view().name("dashboard"))
+        .andExpect(status().isOk());
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(1, urls.size());
+  }
+
+  @Test
+  @WithMockUser(username = "username")
+  @Sql("classpath:createUserWithoutUrl.sql")
+  @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
+  @DisplayName("An authed user with no URLs sees no URLs")
+  void anAuthedUserWithNoUrlsSeesNoUrls() throws Exception {
+    mvc.perform(get("/dashboard")).andExpect(model().attributeExists("urls"));
+
+    Set<Url> urls = urlService.findAll();
+
+    assertEquals(0, urls.size());
+  }
+
+  @Test
   @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
