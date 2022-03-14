@@ -1,11 +1,16 @@
-<html xmlns:th="https://www.thymeleaf.org">
-<nav class="navbar navbar-dark bg-dark fixed-top" aria-label="Main nav bar">
-    <div class="container-fluid justify-content-between ps-4">
-        <div class="navbar-brand fs-2">Wibbly</div>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<nav class="navbar navbar-dark bg-white fixed-top px-5" aria-label="Main nav bar">
+    <div class="navbar-brand fs-2 text-black">Wibbly</div>
 
-        <form th:action="@{/logout}" method="post">
-            <input class="btn nav-item text-white" type="submit" value="Logout"/>
-        </form>
+    <div class="dropdown">
+        <div class="dropdown-toggle" id="dropdownUsername"
+             data-bs-toggle="dropdown" aria-expanded="false" sec:authentication="name">
+        </div>
+        <ul class="dropdown-menu" aria-labelledby="dropdownUsername">
+            <form th:action="@{/logout}" method="post">
+                <input class="dropdown-item" type="submit" value="Logout"/>
+            </form>
+        </ul>
     </div>
 </nav>
 </html>
