@@ -9,19 +9,48 @@
 </nav>
 
 <div class="border-0 p-4 bg-dark w-100">
-    <form class="d-flex flex-row align-items-center mx-auto w-75" name="add-url" th:action="@{/urls}" th:object="${url}"
-          method="post">
-        <div class="input-group">
-            <input type="url" id="fullUrl" name="fullUrl" class="form-control" placeholder="Full URL" required
-                   th:field="*{fullUrl}">
-            <input type="text" id="shortUrl" name="shortUrl" class="form-control" placeholder="Short URL"
-                   th:field="*{shortUrl}">
-            <button class="btn btn-primary" type="submit" id="button-addon2">Add URL</button>
-        </div>
+    <div class="container w-75">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                    <div class="card-body p-4">
+                        <form name="add-url" th:action="@{/urls}" th:object="${url}"
+                              method="post">
+                            <div class="form-floating mb-3">
+                                <input type="url" class="form-control" id="fullUrl" name="fullUrl"
+                                       placeholder="Full URL" th:field="*{fullUrl}" required>
+                                <label for="fullUrl">Full URL</label>
+                            </div>
 
-        <p class="small text-danger text-break mt-2" th:if="${#fields.hasErrors('shortUrl')}"
-           th:errors="*{shortUrl}"></p>
-    </form>
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="shortUrl" name="shortUrl"
+                                       placeholder="Short URL" th:field="*{shortUrl}" required>
+                                <label for="shortUrl">Short URL</label>
+                            </div>
+
+                            <p class="small text-danger text-break mt-2" th:if="${#fields.hasErrors('shortUrl')}"
+                               th:errors="*{shortUrl}">
+                            </p>
+
+                            <hr>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary fw-bold p-2 fs-4" type="submit">
+                                    <i class="fa fa-check text-white"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="d-grid">
+                            <a class="btn btn-outline-secondary p-2 fs-4 mt-3" href="/urls">
+                                <i class="fa fa-undo text-secondary"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>
