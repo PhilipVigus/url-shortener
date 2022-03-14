@@ -3,16 +3,9 @@
 <head th:replace="fragments/head :: head(title='URL Shortner')">
 </head>
 
-<body style="padding-top: 3rem">
+<body style="padding-top: 5rem">
 
-<nav class="navbar navbar-dark bg-dark fixed-top" aria-label="Main nav bar">
-    <div class="container-fluid justify-content-between ps-4">
-        <div class="navbar-brand fs-2">Wibbly</div>
-
-        <form th:action="@{/logout}" method="post">
-            <input class="btn nav-item text-white" type="submit" value="Logout"/>
-        </form>
-    </div>
+<nav th:replace="fragments/navbar">
 </nav>
 
 <div class="container mt-8 border-dark align-items-center mx-auto w-75">
