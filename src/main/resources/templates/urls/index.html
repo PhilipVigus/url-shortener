@@ -17,17 +17,17 @@
         <div class="card-body">
             <div class="list-group" th:each="url : ${urls}">
                 <a class="list-group-item d-flex justify-content-between" th:href="@{'/urls/' + ${url.getId()}}">
-                    <div class="col-sm-2"
-                         th:text="${url.getShortUrl()}"></div>
-                    <div class="col-sm-9 text-end" th:text="${url.getFullUrl()}"></div>
+                    <div class="col-sm-6"
+                         th:text="${#httpServletRequest.getRequestURL().toString().replace(#httpServletRequest.getRequestURI(),'')} + '/' + ${url.getShortUrl()}"></div>
+                    <div class="col-sm-5 text-end" th:text="${url.getFullUrl()}"></div>
                     <div class="col-sm-auto ms-2"><i class="fa fa-edit text-primary"></i></div>
                 </a>
             </div>
-            <div class="card-footer bg-primary text-white d-flex justify-content-center align-items-center p-2 rounded mt-2">
-                <a href="/urls/add" class="fs-2 stretched-link">
+            <a href="/urls/add" class="fs-2">
+                <div class="card-footer bg-primary text-white d-flex justify-content-center align-items-center p-2 rounded mt-2">
                     <i class="fa fa-plus text-white"></i>
-                </a>
-            </div>
+                </div>
+            </a>
         </div>
     </div>
 </div>
