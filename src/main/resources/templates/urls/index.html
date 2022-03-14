@@ -3,26 +3,31 @@
 <head th:replace="fragments/head :: head(title='URL Shortner')">
 </head>
 
-<body style="padding-top: 5rem">
+<body class="bg-dark" style="padding-top: 5rem">
 
 <nav th:replace="fragments/navbar">
 </nav>
 
-<div class="container mt-8 border-dark align-items-center mx-auto w-75">
+<div class="container mt-8 align-items-center mx-auto w-75">
     <div class="card mt-4">
-        <h2 class="card-header bg-dark text-white fs-2">
-            <span sec:authentication="name"></span> - existing URLs (Click for details)
+        <h2 class="card-header fs-2">
+            Existing URLs
         </h2>
+
         <div class="card-body">
-            <div class="list-group-flush px-5" th:each="url : ${urls}">
+            <div class="list-group" th:each="url : ${urls}">
                 <a class="list-group-item d-flex justify-content-between" th:href="@{'/urls/' + ${url.getId()}}">
-                    <div class="col-sm-5"
-                         th:text="${#httpServletRequest.getRequestURL().toString().replace(#httpServletRequest.getRequestURI(),'')} + '/' + ${url.getShortUrl()}"></div>
-                    <div class="col-sm-2 text-danger">redirects to</div>
-                    <div class="col-sm-5" th:text="${url.getFullUrl()}"></div>
+                    <div class="col-sm-2"
+                         th:text="${url.getShortUrl()}"></div>
+                    <div class="col-sm-9 text-end" th:text="${url.getFullUrl()}"></div>
+                    <div class="col-sm-auto ms-2"><i class="fa fa-edit text-primary"></i></div>
                 </a>
             </div>
-            <a href="/urls/add">Add Url</a>
+            <div class="card-footer bg-primary text-white d-flex justify-content-center align-items-center p-2 rounded mt-2">
+                <a href="/urls/add" class="fs-2 stretched-link">
+                    <i class="fa fa-plus text-white"></i>
+                </a>
+            </div>
         </div>
     </div>
 </div>
