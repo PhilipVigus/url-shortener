@@ -13,7 +13,17 @@
         <div class="row">
             <div class="mx-auto">
                 <div class="card border-0 shadow rounded-3 my-5">
-                    <div class="card-body p-4">
+                    <div class="card-body p-4"
+                         x-data="{
+                            customise: false,
+                            customUrl: '',
+                            toggleCustomise () {
+                                console.log('here');
+                                if (!this.customise) {
+                                    this.customUrl = '';
+                                }
+                            }
+                         }">
                         <form name="add-url" th:action="@{/urls}" th:object="${url}"
                               method="post">
                             <div class="form-floating mb-3">
@@ -22,9 +32,17 @@
                                 <label for="fullUrl">Full URL</label>
                             </div>
 
-                            <div class="form-floating mb-3">
+                            <div class="mb-3">
+                                <input class="form-check-input" type="checkbox" value="" id="customise"
+                                       x-model="customise" x-on:click="toggleCustomise">
+                                <label class="form-check-label" for="customise">
+                                    Customise short URL
+                                </label>
+                            </div>
+
+                            <div class="form-floating mb-3" x-show="customise">
                                 <input type="text" class="form-control" id="shortUrl" name="shortUrl"
-                                       placeholder="Short URL" th:value="*{shortUrl}" required>
+                                       placeholder="Short URL" th:value="*{shortUrl}" x-model="customUrl" required>
                                 <label for="shortUrl">Short URL</label>
                             </div>
 
