@@ -39,8 +39,17 @@
                             <hr>
 
                             <div class="d-grid">
-                                <button class="btn btn-primary fw-bold p-2 fs-4" type="submit">
+                                <button class="btn btn-primary p-2 fs-4" type="submit">
                                     <i class="fa fa-save text-white"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                        <form name="delete-url" th:action="@{/urls/{id}(id=${url.id})}" method="post">
+                            <input type="hidden" name="_method" value="delete"/>
+                            <div class="d-grid mt-3">
+                                <button class="btn btn-danger p-2 fs-4" type="submit">
+                                    <i class="fa fa-trash text-white"></i>
                                 </button>
                             </div>
                         </form>
