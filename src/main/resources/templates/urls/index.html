@@ -17,8 +17,13 @@
         <div class="card-body">
             <div class="list-group" th:each="url : ${urls}">
                 <a class="list-group-item d-flex justify-content-between" th:href="@{'/urls/' + ${url.getId()}}">
-                    <div class="col-sm-6"
-                         th:text="${#httpServletRequest.getRequestURL().toString().replace(#httpServletRequest.getRequestURI(),'')} + '/' + ${url.getShortUrl()}"></div>
+                    <div class="col-sm-6">
+                        <h3 class="fw-bold fs-5"
+                            th:text="${#httpServletRequest.getRequestURL().toString().replace(#httpServletRequest.getRequestURI(),'')}
+                            + '/' + ${url.getShortUrl()}">
+                        </h3>
+                        <p>Number of clicks: <span th:text="${url.getNumberOfClicks()}"></span></p>
+                    </div>
                     <div class="col-sm-5 text-end" th:text="${url.getFullUrl()}"></div>
                     <div class="col-sm-auto ms-2"><i class="fa fa-edit text-primary"></i></div>
                 </a>

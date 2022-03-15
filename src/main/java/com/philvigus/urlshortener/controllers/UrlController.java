@@ -29,7 +29,7 @@ public class UrlController {
   }
 
   @GetMapping("/urls")
-  public String view(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
+  public String index(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     Set<Url> urls = authedUser.getUrls();
@@ -40,7 +40,7 @@ public class UrlController {
   }
 
   @GetMapping("/urls/{id}")
-  public String view(
+  public String update(
       @AuthenticationPrincipal UserDetails authedUserDetails,
       @PathVariable("id") long id,
       Model model) {
@@ -58,7 +58,7 @@ public class UrlController {
 
     model.addAttribute("url", urlService.findById(id).get());
 
-    return "urls/view";
+    return "urls/update";
   }
 
   @GetMapping("/urls/add")
@@ -117,7 +117,7 @@ public class UrlController {
     bindingResult = convertGlobalErrors(bindingResult);
 
     if (bindingResult.hasFieldErrors()) {
-      return "urls/view";
+      return "urls/update";
     }
 
     Optional<Url> urlToUpdate = urlService.findById(id);

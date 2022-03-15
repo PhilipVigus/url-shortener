@@ -12,6 +12,9 @@
         <div class="row">
             <div class="mx-auto">
                 <div class="card border-0 shadow rounded-3 my-5">
+                    <h2 class="card-header fs-2">
+                        Edit URL
+                    </h2>
                     <div class="card-body p-4">
                         <form name="update-url" th:action="@{/urls/{id}(id=${url.id})}" th:object="${url}"
                               method="post">

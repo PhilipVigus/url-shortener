@@ -13,6 +13,10 @@
         <div class="row">
             <div class="mx-auto">
                 <div class="card border-0 shadow rounded-3 my-5">
+                    <h2 class="card-header fs-2">
+                        Add URL
+                    </h2>
+
                     <div class="card-body p-4"
                          x-data="{
                             customise: false,
@@ -42,7 +46,7 @@
 
                             <div class="form-floating mb-3" x-show="customise">
                                 <input type="text" class="form-control" id="shortUrl" name="shortUrl"
-                                       placeholder="Short URL" th:value="*{shortUrl}" x-model="customUrl" required>
+                                       placeholder="Short URL" th:value="*{shortUrl}" x-model="customUrl">
                                 <label for="shortUrl">Short URL</label>
                             </div>
 
