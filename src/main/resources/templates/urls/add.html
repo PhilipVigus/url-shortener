@@ -18,13 +18,13 @@
                               method="post">
                             <div class="form-floating mb-3">
                                 <input type="url" class="form-control" id="fullUrl" name="fullUrl"
-                                       placeholder="Full URL" th:field="*{fullUrl}" required>
+                                       placeholder="Full URL" th:value="*{fullUrl}" required>
                                 <label for="fullUrl">Full URL</label>
                             </div>
 
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="shortUrl" name="shortUrl"
-                                       placeholder="Short URL" th:field="*{shortUrl}" required>
+                                       placeholder="Short URL" th:value="*{shortUrl}" required>
                                 <label for="shortUrl">Short URL</label>
                             </div>
 
@@ -42,8 +42,8 @@
                         </form>
 
                         <div class="d-grid">
-                            <a class="btn btn-outline-secondary p-2 fs-4 mt-3" href="/urls">
-                                <i class="fa fa-undo text-secondary"></i>
+                            <a class="btn btn-outline-secondary p-2 fs-4 mt-3 text-decoration-none" href="/urls">
+                                <i class="fa fa-undo text-black"></i>
                             </a>
                         </div>
                     </div>
