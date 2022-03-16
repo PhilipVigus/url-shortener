@@ -15,15 +15,15 @@ import java.util.Set;
 
 @Service
 public class UrlServiceImpl implements UrlService {
-  private static final Long TIME_NORMALISER = 1646416961L;
+  private static final Long TIME_NORMALISER = 1_646_416_961L;
   private final UrlRepository urlRepository;
 
-  public UrlServiceImpl(UrlRepository urlRepository) {
+  public UrlServiceImpl(final UrlRepository urlRepository) {
     this.urlRepository = urlRepository;
   }
 
   @Override
-  public Url save(Url url, User urlOwner) {
+  public Url save(final Url url, final User urlOwner) {
     url.setUser(urlOwner);
 
     if (url.getShortUrl().equals("")) {
@@ -38,18 +38,18 @@ public class UrlServiceImpl implements UrlService {
   }
 
   @Override
-  public Set<Url> findByFullUrl(String fullUrl) {
+  public Set<Url> findByFullUrl(final String fullUrl) {
     return urlRepository.findByFullUrl(fullUrl);
   }
 
   @Override
-  public Optional<Url> findByShortUrl(String shortUrl) {
+  public Optional<Url> findByShortUrl(final String shortUrl) {
     return urlRepository.findByShortUrl(shortUrl);
   }
 
   @Override
   public Set<Url> findAll() {
-    Set<Url> urls = new HashSet<>();
+    final Set<Url> urls = new HashSet<>();
 
     urlRepository.findAll().forEach(urls::add);
 
@@ -57,33 +57,32 @@ public class UrlServiceImpl implements UrlService {
   }
 
   @Override
-  public void deleteById(long id) {
+  public void deleteById(final long id) {
     urlRepository.deleteById(id);
   }
 
   @Override
-  public Optional<Url> findById(long id) {
+  public Optional<Url> findById(final long id) {
     return urlRepository.findById(id);
   }
 
   @Override
-  public Url incrementNumberOfClicks(Url url) {
+  public Url incrementNumberOfClicks(final Url url) {
     url.setNumberOfClicks(url.getNumberOfClicks() + 1);
 
     return urlRepository.save(url);
   }
 
   @Override
-  public Url update(Url url, User user) {
-    Optional<Url> existingUrl = findById(url.getId());
+  public Url update(final Url url, final User user) {
+    final Optional<Url> existingUrl = findById(url.getId());
 
     if (!existingUrl.isPresent()) {
       return save(url, user);
     }
 
-    String newShortUrl = url.getShortUrl().equals("")
-            ? calculateUniqueShortUrl()
-            : url.getShortUrl();
+    final String newShortUrl =
+        url.getShortUrl().equals("") ? calculateUniqueShortUrl() : url.getShortUrl();
 
     existingUrl.get().setShortUrl(newShortUrl);
     existingUrl.get().setFullUrl(encodeString(url.getFullUrl()));
@@ -92,25 +91,29 @@ public class UrlServiceImpl implements UrlService {
   }
 
   private String calculateUniqueShortUrl() {
-    String shortUrl;
-    Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+    String shortUrl = "";
+    boolean uniqueShortUrlGenerated = false;
 
-    while (true) {
-      long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
-      byte[] bytes = String.valueOf(time).getBytes();
+    final Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+
+    while (!uniqueShortUrlGenerated) {
+      final long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
+      final byte[] bytes = String.valueOf(time).getBytes();
 
       shortUrl = encoder.encodeToString(bytes);
 
       if (!findByShortUrl(shortUrl).isPresent()) {
-        return shortUrl;
+        uniqueShortUrlGenerated = true;
       }
     }
+
+    return shortUrl;
   }
 
-  private String encodeString(String string) {
-    DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
+  private String encodeString(final String string) {
+    final DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory();
     factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.TEMPLATE_AND_VALUES);
-    URI uri = factory.uriString(string).build();
+    final URI uri = factory.uriString(string).build();
 
     return uri.toString();
   }

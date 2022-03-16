@@ -17,25 +17,25 @@ public class RegistrationController {
   private final UserService userService;
 
   @Autowired
-  public RegistrationController(UserService userService) {
+  public RegistrationController(final UserService userService) {
     this.userService = userService;
   }
 
   @GetMapping("/register")
-  public String view(Model model) {
+  public String view(final Model model) {
     model.addAttribute("user", new User());
     return "auth/register";
   }
 
   @PostMapping("/register")
-  public String create(@Valid User user, BindingResult bindingResult) {
+  public String create(final @Valid User user, final BindingResult bindingResult) {
     if (bindingResult.hasErrors()) {
       return "auth/register";
     }
 
-    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    String encodedPassword = encoder.encode(user.getPassword());
+    final String encodedPassword = encoder.encode(user.getPassword());
 
     user.setPassword(encodedPassword);
 

@@ -16,13 +16,13 @@ import java.util.Optional;
 public class UrlRedirectController {
   private final UrlService urlService;
 
-  public UrlRedirectController(UrlService urlService) {
+  public UrlRedirectController(final UrlService urlService) {
     this.urlService = urlService;
   }
 
   @GetMapping("{shortUrl}")
-  public ResponseEntity<Void> redirect(@PathVariable String shortUrl) {
-    Optional<Url> url = urlService.findByShortUrl(shortUrl);
+  public ResponseEntity<Void> redirect(final @PathVariable String shortUrl) {
+    final Optional<Url> url = urlService.findByShortUrl(shortUrl);
 
     if (!url.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
