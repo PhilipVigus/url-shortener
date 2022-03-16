@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title='URL Shortner')">
+</head>
+<body class="bg-dark" style="padding-top: 5rem">
+
+<nav th:replace="fragments/navbar">
+</nav>
+
+<div class="border-0 p-4 bg-dark w-100">
+    <div class="container w-75">
+        <div class="row">
+            <div class="mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                    <h2 class="card-header fs-2">
+                        Edit URL
+                    </h2>
+                    <div class="card-body p-4">
+                        <form name="update-url" th:action="@{/urls/{id}(id=${url.id})}" th:object="${url}"
+                              method="post">
+                            <input type="hidden" name="_method" value="put"/>
+
+                            <div class="form-floating mb-3">
+                                <input type="url" class="form-control" id="fullUrl" name="fullUrl"
+                                       placeholder="Full URL" th:value="*{fullUrl}" required>
+                                <label for="fullUrl">Full URL</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="shortUrl" name="shortUrl"
+                                       placeholder="Short URL (auto-generated if left blank)" th:value="*{shortUrl}">
+                                <label for="shortUrl">Short URL (auto-generated if blank)</label>
+                            </div>
+
+                            <p class="small text-danger text-break mt-2" th:if="${#fields.hasErrors('shortUrl')}"
+                               th:errors="*{shortUrl}">
+                            </p>
+
+                            <hr>
+
+                            <div class="d-grid">
+                                <button class="btn btn-primary p-2 fs-4" type="submit">
+                                    <i class="fa fa-save text-white"></i>
+                                </button>
+                            </div>
+                        </form>
+
+                        <div class="d-grid mt-3">
+                            <button class="btn btn-danger p-2 fs-4" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal">
+                                <i class="fa fa-trash text-white"></i>
+                            </button>
+                        </div>
+
+                        <div class="d-grid">
+                            <a class="btn btn-outline-secondary p-2 fs-4 mt-3 text-decoration-none" href="/urls">
+                                <i class="fa fa-undo text-black"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                Are you sure you want to delete this URL?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="fa fa-undo text-black"></i>
+                </button>
+                <form name="delete-url" th:action="@{/urls/{id}(id=${url.id})}" method="post">
+                    <input type="hidden" name="_method" value="delete"/>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-check text-white"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

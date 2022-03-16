@@ -84,13 +84,13 @@ class UrlControllerTest {
   @WithMockUser(username = "username")
   @Sql("classpath:createUserWithUrl.sql")
   @Sql(scripts = "classpath:clean.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-  @DisplayName("An authed user can view their URL")
-  void anAuthedUserCanViewTheirUrl() throws Exception {
+  @DisplayName("An authed user can view the edit URL page")
+  void anAuthedUserCanViewTheEditUrlPage() throws Exception {
     Set<Url> urls = urlService.findAll();
     Url url = urls.stream().findFirst().get();
 
     mvc.perform(get("/urls/" + url.getId()))
-        .andExpect(view().name("urls/view"))
+        .andExpect(view().name("urls/update"))
         .andExpect(status().isOk());
   }
 
@@ -356,7 +356,7 @@ class UrlControllerTest {
                 .param("fullUrl", FULL_URL)
                 .param("shortUrl", "short"))
         .andExpect(status().isOk())
-        .andExpect(view().name("urls/view"))
+        .andExpect(view().name("urls/update"))
         .andExpect(model().hasErrors());
   }
 
