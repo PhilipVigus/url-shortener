@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Service
 public class UrlServiceImpl implements UrlService {
-  private static final Long TIME_NORMALISER = 1646416961L;
+  private static final Long TIME_NORMALISER = 1_646_416_961L;
   private final UrlRepository urlRepository;
 
   public UrlServiceImpl(UrlRepository urlRepository) {
@@ -81,9 +81,8 @@ public class UrlServiceImpl implements UrlService {
       return save(url, user);
     }
 
-    String newShortUrl = url.getShortUrl().equals("")
-            ? calculateUniqueShortUrl()
-            : url.getShortUrl();
+    String newShortUrl =
+        url.getShortUrl().equals("") ? calculateUniqueShortUrl() : url.getShortUrl();
 
     existingUrl.get().setShortUrl(newShortUrl);
     existingUrl.get().setFullUrl(encodeString(url.getFullUrl()));
@@ -92,19 +91,23 @@ public class UrlServiceImpl implements UrlService {
   }
 
   private String calculateUniqueShortUrl() {
-    String shortUrl;
+    String shortUrl = "";
+    boolean uniqueShortUrlGenerated = false;
+
     Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
 
-    while (true) {
+    while (!uniqueShortUrlGenerated) {
       long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
       byte[] bytes = String.valueOf(time).getBytes();
 
       shortUrl = encoder.encodeToString(bytes);
 
       if (!findByShortUrl(shortUrl).isPresent()) {
-        return shortUrl;
+        uniqueShortUrlGenerated = true;
       }
     }
+
+    return shortUrl;
   }
 
   private String encodeString(String string) {
