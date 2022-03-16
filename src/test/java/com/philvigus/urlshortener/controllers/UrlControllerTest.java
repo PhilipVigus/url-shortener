@@ -136,7 +136,6 @@ class UrlControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
         .andExpect(status().is3xxRedirection())
         .andExpect(redirectedUrl("/urls"));
-    ;
 
     Set<Url> remainingUrls = urlService.findAll();
 
@@ -346,8 +345,6 @@ class UrlControllerTest {
     url.setShortUrl(SHORT_URL);
 
     urlService.save(url, user);
-
-    Set<Url> urls = urlService.findAll();
 
     mvc.perform(
             put("/urls/" + url.getId())
