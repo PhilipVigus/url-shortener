@@ -23,16 +23,17 @@ public class UrlController {
   private final UrlService urlService;
   private final UserService userService;
 
-  public UrlController(UrlService urlService, UserService userService) {
+  public UrlController(final UrlService urlService, final UserService userService) {
     this.urlService = urlService;
     this.userService = userService;
   }
 
   @GetMapping("/urls")
-  public String index(@AuthenticationPrincipal UserDetails authedUserDetails, Model model) {
-    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+  public String index(
+      final @AuthenticationPrincipal UserDetails authedUserDetails, final Model model) {
+    final User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
-    Set<Url> urls = authedUser.getUrls();
+    final Set<Url> urls = authedUser.getUrls();
 
     model.addAttribute("urls", urls);
 
@@ -41,16 +42,16 @@ public class UrlController {
 
   @GetMapping("/urls/{id}")
   public String update(
-      @AuthenticationPrincipal UserDetails authedUserDetails,
-      @PathVariable("id") long id,
-      Model model) {
-    Optional<Url> url = urlService.findById(id);
+      final @AuthenticationPrincipal UserDetails authedUserDetails,
+      final @PathVariable("id") long id,
+      final Model model) {
+    final Optional<Url> url = urlService.findById(id);
 
     if (!url.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+    final User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     if (!url.get().getUser().equals(authedUser)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -62,7 +63,7 @@ public class UrlController {
   }
 
   @GetMapping("/urls/add")
-  public String add(@ModelAttribute Url url, Model model) {
+  public String add(final @ModelAttribute Url url, final Model model) {
 
     model.addAttribute("url", url);
 
@@ -71,14 +72,15 @@ public class UrlController {
 
   @DeleteMapping("/urls/{id}")
   public String delete(
-      @AuthenticationPrincipal UserDetails authedUserDetails, @PathVariable("id") long id) {
-    Optional<Url> urlToDelete = urlService.findById(id);
+      final @AuthenticationPrincipal UserDetails authedUserDetails,
+      final @PathVariable("id") long id) {
+    final Optional<Url> urlToDelete = urlService.findById(id);
 
     if (!urlToDelete.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+    final User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     if (!urlToDelete.get().getUser().equals(authedUser)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -91,8 +93,8 @@ public class UrlController {
 
   @PostMapping("/urls")
   public String create(
-      @AuthenticationPrincipal UserDetails authedUserDetails,
-      @Valid @ModelAttribute Url url,
+      final @AuthenticationPrincipal UserDetails authedUserDetails,
+      final @Valid @ModelAttribute Url url,
       BindingResult bindingResult) {
 
     bindingResult = convertGlobalErrors(bindingResult);
@@ -101,7 +103,7 @@ public class UrlController {
       return "urls/add";
     }
 
-    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+    final User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     urlService.save(url, authedUser);
 
@@ -110,9 +112,9 @@ public class UrlController {
 
   @PutMapping("/urls/{id}")
   public String update(
-      @AuthenticationPrincipal UserDetails authedUserDetails,
-      @PathVariable("id") long id,
-      @Valid @ModelAttribute Url url,
+      final @AuthenticationPrincipal UserDetails authedUserDetails,
+      final @PathVariable("id") long id,
+      final @Valid @ModelAttribute Url url,
       BindingResult bindingResult) {
     bindingResult = convertGlobalErrors(bindingResult);
 
@@ -120,13 +122,13 @@ public class UrlController {
       return "urls/update";
     }
 
-    Optional<Url> urlToUpdate = urlService.findById(id);
+    final Optional<Url> urlToUpdate = urlService.findById(id);
 
     if (!urlToUpdate.isPresent()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    User authedUser = userService.findByUsername(authedUserDetails.getUsername());
+    final User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
     if (!urlToUpdate.get().getUser().equals(authedUser)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
@@ -137,7 +139,7 @@ public class UrlController {
     return "redirect:/urls";
   }
 
-  private BindingResult convertGlobalErrors(BindingResult bindingResult) {
+  private BindingResult convertGlobalErrors(final BindingResult bindingResult) {
     if (bindingResult.getGlobalErrors().size() > 0) {
       bindingResult.addError(new FieldError("url", "shortUrl", "Short URL already in use"));
     }

@@ -10,17 +10,17 @@ public class UserServiceImpl implements UserService {
   private final UserRepository repository;
 
   @Autowired
-  public UserServiceImpl(UserRepository repository) {
+  public UserServiceImpl(final UserRepository repository) {
     this.repository = repository;
   }
 
   @Override
-  public User save(User user) {
+  public User save(final User user) {
     return repository.save(user);
   }
 
   @Override
-  public User findByUsername(String username) {
+  public User findByUsername(final String username) {
     return repository.findByUsername(username);
   }
 }
