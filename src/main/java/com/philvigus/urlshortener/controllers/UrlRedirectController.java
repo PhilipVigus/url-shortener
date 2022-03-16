@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.net.URI;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class UrlRedirectController {
     Optional<Url> url = urlService.findByShortUrl(shortUrl);
 
     if (!url.isPresent()) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     urlService.incrementNumberOfClicks(url.get());

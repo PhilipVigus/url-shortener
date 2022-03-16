@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(title='Short URL not found')">
+<body>
+<div class="bg-dark vh-100 d-flex align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+                <div class="card border-0 shadow rounded-3 my-5">
+                    <h2 class="card-header fs-2">
+                        Page not found
+                    </h2>
+
+                    <div class="card-body p-4">
+                        <p>It doesn't look like that URL you are looking for exists</p>
+
+                        <hr>
+
+                        <div class="d-grid">
+                            <a class="btn btn-primary fw-bold p-2 fs-4" href="/">
+                                Home
+                            </a>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
