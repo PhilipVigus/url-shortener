@@ -63,7 +63,7 @@ public class UniqueShortUrlValidator implements ConstraintValidator<UniqueShortU
 
     // There's an existing URL with the new URL's short URL, but it represents
     // the same one (ie it's being updated), so everything is good
-    if (existingUrlWithSameShortUrl.getId() == urlBeingValidated.getId()) {
+    if (existingUrlWithSameShortUrl.getId().equals(urlBeingValidated.getId())) {
       return true;
     }
 

@@ -52,7 +52,7 @@ public class UrlController {
 
     User authedUser = userService.findByUsername(authedUserDetails.getUsername());
 
-    if (url.get().getUser() != authedUser) {
+    if (!url.get().getUser().equals(authedUser)) {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
