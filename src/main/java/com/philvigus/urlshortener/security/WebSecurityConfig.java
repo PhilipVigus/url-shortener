@@ -38,12 +38,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   @Override
-  protected void configure(AuthenticationManagerBuilder auth) {
+  protected void configure(final AuthenticationManagerBuilder auth) {
     auth.authenticationProvider(authenticationProvider());
   }
 
   @Override
-  protected void configure(HttpSecurity http) throws Exception {
+  protected void configure(final HttpSecurity http) throws Exception {
     http.authorizeRequests()
         .antMatchers("/urls/**")
         .authenticated()

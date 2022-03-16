@@ -94,7 +94,7 @@ public class UrlServiceImpl implements UrlService {
     String shortUrl = "";
     boolean uniqueShortUrlGenerated = false;
 
-    Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
+    final Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
 
     while (!uniqueShortUrlGenerated) {
       final long time = Instant.now().getEpochSecond() - UrlServiceImpl.TIME_NORMALISER;
