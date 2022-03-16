@@ -9,9 +9,6 @@ import java.util.Arrays;
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
 
   @Override
-  public void initialize(ValidPassword constraintAnnotation) {}
-
-  @Override
   public boolean isValid(String password, ConstraintValidatorContext context) {
     PasswordValidator validator =
         new PasswordValidator(
