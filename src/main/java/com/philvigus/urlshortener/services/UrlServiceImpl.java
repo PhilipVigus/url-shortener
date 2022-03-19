@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Service
 public class UrlServiceImpl implements UrlService {
-  private static final Long TIME_NORMALISER = 1_646_416_961L;
+  private static final Long TIME_NORMALISER = 1_647_688_187L;
   private final UrlRepository urlRepository;
 
   public UrlServiceImpl(final UrlRepository urlRepository) {
