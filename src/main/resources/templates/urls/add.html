@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="fragments/head :: head(title='URL Shortner')">
-</head>
 
-<body class="bg-dark" style="padding-top: 5rem">
+<head th:replace="fragments/head :: head(title='URL Shortner')"></head>
 
-<nav th:replace="fragments/navbar">
-</nav>
+<body class="bg-dark urls">
+
+<nav th:replace="fragments/navbar"></nav>
 
 <div class="border-0 p-4 bg-dark w-100">
     <div class="container w-75">
@@ -74,5 +73,8 @@
         </div>
     </div>
 </div>
+
+<footer th:replace="fragments/footer"></footer>
+
 </body>
 </html>
