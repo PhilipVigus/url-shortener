@@ -7,7 +7,7 @@ This is a simple URL shortener, which is my first CRUD application using Java.
 My aim with the project was to keep things relatively simple, using it as an opportunity to learn Java, Spring Boot and
 JUnit while creating a simple application I could add to my portfolio.
 
-**[See a live demo here!](https://weather-phil.netlify.app/)** - please note that because it is hosted on the Heroku
+**[See a live demo here!](http://wibbly.philvigus.com/)** - please note that because it is hosted on the Heroku
 free tier, if it hasn't been used for a while it can take the page a few seconds to load while it waits for the server
 to start up. After that though, everything runs as normal.
 
@@ -22,7 +22,7 @@ Key features:
 ## Technologies used
 
 | Purpose                    | Technology                             |
-|:---------------------------|:---------------------------------------|
+| :------------------------- | :------------------------------------- |
 | Language                   | Java                                   |
 | Front end                  | Thymeleaf, Bootstrap, Alpine           |
 | Back end                   | Spring Boot, Hibernate, PostgreSQL     |
