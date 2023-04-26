@@ -2,7 +2,7 @@
 
 ![main screenshot](./main-screenshot.png)
 
-This is a simple URL shortener written using Spring Booot.
+This is a simple URL shortener written using Spring Boot - demo available [here](http://wibbly.xyz).
 
 Key features:
 
